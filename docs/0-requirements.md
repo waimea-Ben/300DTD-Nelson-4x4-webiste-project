@@ -43,7 +43,7 @@ The end-user implications of a digital technology or digital outcome (e.g. a web
 must be usuable for the older clients, have big buttons and text, easy to read ui
 must appeal to the 4wd people
 and work on a wide range of devices that theyre likely to use, pc, mobile, etc.
-
+s
 ### Impact / Considerations
 
 good use of icons and colour choices for contrast, good size components, and must work on mobile and pc. must make use of proffesional langauge, ands make frquent use of end user feedback to snsure apt adjustemnts.

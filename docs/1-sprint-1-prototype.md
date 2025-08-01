@@ -163,11 +163,13 @@ used this colour scheme initailly ![colour scheme 1](image-1.png)
 
 showed it to user and asked for feedback
 > Would prefer more prevalent green and a brown or orange accent instead perhaps?
-> clour on the logo text and maybe around som eof the boxes
+
+> colour on the logo text and maybe around som eof the boxes
 
 ### Changes / Improvements
 
-swapped out the colour scheme
+swapped out the colour scheme to this
+![new colour scheme](image-2.png)
 
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/design/TKAd4Dd4OskKXqjpvmHE6C/Nelson4wdClub-V3?node-id=0-1&embed-host=share" allowfullscreen></iframe>
 

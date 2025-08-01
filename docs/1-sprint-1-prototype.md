@@ -122,7 +122,7 @@ refined most components and added much better ui elements across the page.
  - close and save buttons
 
 
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/design/ElUbxsMwpJJuRBGNFP3i0S/Nelson4wdClub-V2?embed-host=share" 
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/design/ElUbxsMwpJJuRBGNFP3i0S/Nelson4wdClub-V2?embed-host=share">
 
 ---
 

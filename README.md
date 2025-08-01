@@ -19,6 +19,7 @@ Replace this text with your project description and list the key features below
 ## Project Links
 
 - [GitHub repo for the project](https://github.com/waimea-Ben/300DTD-Nelson-4x4-webiste-project)
+- [Documentation](https://waimea-ben.github.io/300DTD-Nelson-4x4-webiste-project/)
 - [Live web app](https://...)
 
 ---

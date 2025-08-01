@@ -171,7 +171,10 @@ showed it to user and asked for feedback
 swapped out the colour scheme to this
 ![new colour scheme](image-2.png)
 
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/design/TKAd4Dd4OskKXqjpvmHE6C/Nelson4wdClub-V3?node-id=0-1&embed-host=share" allowfullscreen></iframe>
+replaced all edit and new forms with proper data
+refinde 90% of the features and made it far more aesthetic.
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/proto/93NxtzjtPoRUcOnaMIgRaY/Nelson4wdClub-V3--Colour-V2-?node-id=2007-9&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=2001%3A1264&embed-host=share" allowfullscreen></iframe>
 
 ## Sprint Review
 

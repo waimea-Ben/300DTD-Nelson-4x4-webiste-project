@@ -27,7 +27,7 @@ The database consists of five interconnected tables:
 The system will require input from Admins:
 
 Members Input:
-Admins add new user with: name, email, phone number (number), password, and vehicle ownership.
+Admins add new user with: name, email, phone number (number), password (hashed), and vehicle ownership.
 
 Trip Creation:
 Admins or leaders will create new trips by inputting: trip name, date/time, location, meeting point, grade (difficulty), notes, summary, photos, and leader ID.

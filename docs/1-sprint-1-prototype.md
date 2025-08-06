@@ -14,7 +14,7 @@ Develop a prototype that simulates the key functionality of the system, then tes
 
 this is the initiail design for the databse,
 
-![database layout](image.png)
+![database layout](images/databaseLayout.png)
 
 The database consists of five interconnected tables:
 
@@ -154,7 +154,7 @@ Having established the layout of the UI screens, the prototype was refined visua
 
 This Figma demo shows the UI with refinements applied:
 
-used this colour scheme initailly ![colour scheme 1](image-1.png)
+used this colour scheme initailly ![colour scheme 1](images/BlueGreenColour.png)
 
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/proto/svag5w3U8gRgK9Tp2ppttT/Nelson4wdClub-V3--Colour-V1-?node-id=2001-1264&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=2001%3A1264&embed-host=share" allowfullscreen></iframe>
 
@@ -169,7 +169,7 @@ showed it to user and asked for feedback
 ### Changes / Improvements
 
 swapped out the colour scheme to this
-![new colour scheme](image-2.png)
+![new colour scheme](images/GreenColourScheme.png)
 
 replaced all edit and new forms with proper data
 refinde 90% of the features and made it far more aesthetic.

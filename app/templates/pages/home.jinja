@@ -27,7 +27,59 @@ community of 4WD enthusiasts.</p>
 <section id="homeRecent">
 <h2>Recent Adventures</h2>
 
+        {% for trip in past_trips %}
+            <article>
+                <h3>{{ trip.name }}</h3>
+                <p>{{ trip.location }}</p>
+                <p>{{ trip.summary }}</p>
+                <p><strong>Date:</strong> {{ trip.date }}</p>
+
+            </article>
+        {% endfor %}
+  
 </section>
+
+<section id="Join_the_club">
+<h2>Join the Club</h2>
+
+    <p>Become a member of the Nelson 4wd Club and enjoy exclusive benefits, including access to our trips, events, and community resources.</p>
+
+    <Article id="features">
+        <h3>community</h3>
+
+        <li>Friendly welcoming members</li>
+        <li>Social events</li>
+        <li>Knowledge and tips</li>
+    </Article>
+
+    <Article id="features">
+        <h3>Vehicle support</h3>
+
+        <li>Member discounts</li>
+        <li>Recovery assistance</li>
+        <li>Vehicle modification advice</li>
+        <li>Technical workshops</li>
+    </Article>
+
+    <Article id="features">
+        <h3>Regular trips</h3>
+
+        <li>Monthly organized adventures</li>
+        <li>Beginner to advanced 
+      difficulty levels</li>
+        <li>Experienced trip leaders</li>
+    </Article>
+
+    <Article id="features">
+        <h3>Exclusive access</h3>
+
+        <li>Private land permissions</li>
+        <li>Remote track locations</li>
+        <li>Local landowner relationships</li>
+    </Article>
+
+    <h2>$65 a year</h2>
+    <a href="mailto:someone@example.com?subject=New%20member.">Contact us</a>
 
 
 

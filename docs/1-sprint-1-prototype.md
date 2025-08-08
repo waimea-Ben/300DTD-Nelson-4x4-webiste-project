@@ -171,12 +171,12 @@ showed it to user and asked for feedback
 swapped out the colour scheme to this
 ![new colour scheme](images/GreenColourScheme.png)
 
-replaced all edit and new forms with proper data
-refinde 90% of the features and made it far more aesthetic.
+replaced all edit and new forms with proper fields and data
 
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/proto/93NxtzjtPoRUcOnaMIgRaY/Nelson4wdClub-V3--Colour-V2-?node-id=2007-9&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=2001%3A1264&embed-host=share" allowfullscreen></iframe>
+refind 90% of the features and made it far more aesthetic.
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/proto/93NxtzjtPoRUcOnaMIgRaY/Nelson4wdClub-V3--Colour-V2-?node-id=8005-154&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&embed-host=share" allowfullscreen></iframe>
 
 ## Sprint Review
 
-Replace this text with a statement about how the sprint has moved the project forward - key success point, any things that didn't go so well, etc.
-
+this sprint has moved the project from just a flow to a complete working prototype that if hosted would be perfect. all left to do is to convert to an actual html site

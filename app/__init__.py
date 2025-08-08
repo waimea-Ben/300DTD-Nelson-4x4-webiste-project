@@ -32,8 +32,22 @@ init_datetime(app)  # Handle UTC dates in timestamps
 # Home page route
 #-----------------------------------------------------------
 @app.get("/")
-def index():
-    return render_template("pages/home.jinja")
+def home_past_trips():
+    with connect_db() as client:
+        # Get all the things from the DB
+        sql = """
+            SELECT *
+
+            FROM trips
+            WHERE date(trips.date) < date('now')
+            ORDER BY trips.date DESC
+        """
+        params=[]
+        result = client.execute(sql, params)
+        past_trips = result.rows
+
+        # And show them on the page
+        return render_template("pages/home.jinja",  past_trips = past_trips)
 
 
 #-----------------------------------------------------------

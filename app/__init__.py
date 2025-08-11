@@ -51,11 +51,26 @@ def home_past_trips():
 
 
 #-----------------------------------------------------------
-# About page route
+# Past trips page route
 #-----------------------------------------------------------
-@app.get("/about/")
-def about():
-    return render_template("pages/about.jinja")
+@app.get("/past/")
+def past_trips():
+    with connect_db() as client:
+        # Get all the things from the DB
+        sql = """
+            SELECT *
+
+            FROM trips
+            WHERE date(trips.date) < date('now')
+            ORDER BY trips.date DESC
+        """
+        params=[]
+        result = client.execute(sql, params)
+        past_trips = result.rows
+
+        # And show them on the page
+        return render_template("pages/past.jinja",  past_trips = past_trips)
+
 
 
 #-----------------------------------------------------------
@@ -171,14 +186,6 @@ def delete_a_thing(id):
 
 
 #-----------------------------------------------------------
-# User registration form route
-#-----------------------------------------------------------
-@app.get("/register")
-def register_form():
-    return render_template("pages/register.jinja")
-
-
-#-----------------------------------------------------------
 # User login form route
 #-----------------------------------------------------------
 @app.get("/login")
@@ -275,3 +282,43 @@ def logout():
     flash("Logged out successfully", "success")
     return redirect("/")
 
+#-----------------------------------------------------------
+# admin page route
+#-----------------------------------------------------------
+@app.get("/settings")
+def admin_settings():
+    return render_template("pages/admin_settings.jinja")
+#-----------------------------------------------------------
+@app.get("/trips")
+def admin_trips():
+    return render_template("pages/admin_trips.jinja")
+#-----------------------------------------------------------
+@app.get("/members")
+def admin_members():
+    search_text = request.args.get("q", "")  # get search term or empty string
+    with connect_db() as client:
+        sql = """
+            SELECT *
+            FROM members
+            WHERE id != 5
+              AND (
+                  name LIKE ?
+                  OR email LIKE ?
+              )
+            ORDER BY name ASC
+        """
+        search_param = f"%{search_text}%"
+        params = [search_param, search_param]
+        result = client.execute(sql, params)
+
+        if result.rows:
+            members = result.rows
+            return render_template("pages/admin_members.jinja", members=members, search_text=search_text, no_results=False)
+        else:
+            # No results found — pass a flag to template or return a custom message
+            return render_template("pages/admin_members.jinja", members=[], search_text=search_text, no_results=True)
+
+
+       
+
+# #-----------------------------------------------------------

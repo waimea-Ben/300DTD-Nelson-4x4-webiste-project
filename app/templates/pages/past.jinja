@@ -1,0 +1,37 @@
+{#=====================================================
+  About page (DEMO)
+  - Information about Flask
+  - Information about Jinja
+  - Information about Turso
+  - Information about PicoCSS
+=====================================================#}
+
+{% extends 'pages/base.jinja' %}
+
+
+{% block title %}
+
+    Past trips
+
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Past Trips</h1>
+
+{% for trip in past_trips %}
+            <article>
+            <header>
+                <h2>{{ trip.name }}</h2> <p>{{ trip.date }}</p>
+            </header>
+
+                <p>{{ trip.location }}</p>
+                <p>{{ trip.summary }}</p>
+
+
+            </article>
+        {% endfor %}
+
+{% endblock %}
+

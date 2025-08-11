@@ -1,0 +1,27 @@
+{#=====================================================
+  admin page
+=====================================================#}
+
+{% extends 'pages/base.jinja' %}
+
+
+{% block title %}
+
+    Admin
+
+{% endblock %}
+
+
+{% block content %}
+
+    <h1>Admin</h1>
+
+    <div class="tab-bar">
+        <a href="/settings" class="tab active">settings</a>
+        <a href="/trips" class="tab">trips</a>
+        <a href="/members" class="tab">Members</a>
+    </div>  
+
+
+{% endblock %}
+

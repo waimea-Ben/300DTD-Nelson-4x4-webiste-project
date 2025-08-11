@@ -1,0 +1,51 @@
+{#=====================================================
+  admin page
+=====================================================#}
+
+{% extends 'pages/base.jinja' %}
+
+
+{% block title %}
+
+    Admin
+
+{% endblock %}
+
+
+{% block content %}
+
+ <h1>Admin</h1>
+
+<div class="tab-bar">
+    <a href="/settings" class="tab">settings</a>
+    <a href="/trips" class="tab">trips</a>
+    <a href="/members" class="tab active">Members</a>
+</div>  
+
+<section class="members-list">
+    <header>
+        <h2>Member Management</h2>
+        <p>Add, edit, and manage current members</p>
+    </header>
+
+    <form action="/members" method="get">
+        <input type="text" name="q" value="{{ search_text }}" placeholder="Search members...">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if members %}
+        {% for member in members %}
+            <article>
+                <strong>{{ member.name }}</strong>
+                <p>{{ member.vehicle }}</p>
+            </article>
+        {% endfor %}
+    {% else %}
+        <p>No members found.</p>
+    {% endif %}
+</section>
+
+
+
+{% endblock %}
+

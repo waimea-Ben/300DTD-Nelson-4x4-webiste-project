@@ -17,13 +17,15 @@
  <h1>Admin</h1>
 
 <div class="tab-bar">
-    <a href="/settings" class="tab">settings</a>
-    <a href="/trips" class="tab">trips</a>
-    <a href="/members" class="tab active">Members</a>
+    <a href="/admin/settings" class="tab">settings</a>
+    <a href="/admin/trips" class="tab">trips</a>
+    <a href="/admin/members" class="tab active">Members</a>
+    
 </div>  
 
 <section class="members-list">
     <header>
+    <br>
         <h2>Member Management</h2>
         <p>Add, edit, and manage current members</p>
     </header>
@@ -35,17 +37,42 @@
 
     {% if members %}
         {% for member in members %}
-            <article>
-                <strong>{{ member.name }}</strong>
-                <p>{{ member.vehicle }}</p>
+            <article id="member-{{ member.id }}">
+                {% include 'components/member_details.jinja' %}
             </article>
         {% endfor %}
     {% else %}
         <p>No members found.</p>
     {% endif %}
+
 </section>
 
 
 
 {% endblock %}
+<javascript>
+document.querySelectorAll('.edit-button').forEach(button => {
+  button.addEventListener('click', async (e) => {
+    e.preventDefault();
 
+    const memberId = button.dataset.memberId;
+    // Fetch the form HTML from your server endpoint
+    const response = await fetch(`/members/${memberId}/edit`);
+    if (!response.ok) {
+      alert('Failed to load form');
+      return;
+    }
+    const formHtml = await response.text();
+
+    // Show popup and insert form HTML
+    document.getElementById('modalContent').innerHTML = formHtml;
+    document.getElementById('editModal').style.display = 'block';
+    document.getElementById('modalOverlay').style.display = 'block';
+  });
+});
+
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('editModal').style.display = 'none';
+  document.getElementById('modalOverlay').style.display = 'none';
+});
+</javascript>

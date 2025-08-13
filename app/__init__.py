@@ -163,26 +163,66 @@ def add_a_thing():
 # Route for deleting a thing, Id given in the route
 # - Restricted to logged in users
 #-----------------------------------------------------------
-@app.get("/delete/<int:id>")
-@login_required
-def delete_a_thing(id):
-    # Get the user id from the session
-    user_id = session["user_id"]
+@app.get("/members/<int:id>/delete")
+#@login_required
+def delete_a_member(id):
 
     with connect_db() as client:
-        # Delete the thing from the DB only if we own it
-        sql = "DELETE FROM things WHERE id=? AND user_id=?"
-        params = [id, user_id]
+        # Delete the member from the DB
+        sql = "DELETE FROM members WHERE id=?"
+        params = [id]
         client.execute(sql, params)
 
         # Go back to the home page
-        flash("Thing deleted", "success")
-        return redirect("/things")
+        flash("Member Deleted", "success")
+        return redirect("/admin/members")
 
 
+#-----------------------------------------------------------
+    
+@app.get("/members/<int:member_id>/edit")
+#@login_required
+def edit_member(member_id):
+    with connect_db() as client:
+        # Get the member details from the DB
+        sql = "SELECT * FROM members WHERE id=?"
+        params = [member_id]
+        result = client.execute(sql, params)
+
+        # Did we get a result?
+        if result.rows:
+            # yes, so show it on the page
+            member = result.rows[0]
+            return render_template("components/member_form.jinja", member=member)
+
+        else:
+            # No, so show error
+            return not_found_error()
 
 
+#-----------------------------------------------------------
+    
+@app.put("/members/<int:member_id>/edit")
+#@login_required
+def update_member(member_id):
+    with connect_db() as client:
+        # Get the member details from the form
+        # Run an UPDATE SQL statement to update the member
 
+        # Get the updated record
+        sql = "SELECT * FROM members WHERE id=?"
+        params = [member_id]
+        result = client.execute(sql, params)
+
+        # Did we get a result?
+        if result.rows:
+            # yes, so show it on the page
+            member = result.rows[0]
+            return render_template("components/member_details.jinja", member=member)
+
+        else:
+            # No, so show error
+            return not_found_error()
 
 
 #-----------------------------------------------------------
@@ -285,15 +325,16 @@ def logout():
 #-----------------------------------------------------------
 # admin page route
 #-----------------------------------------------------------
-@app.get("/settings")
+@app.get("/admin/settings")
 def admin_settings():
     return render_template("pages/admin_settings.jinja")
 #-----------------------------------------------------------
-@app.get("/trips")
+@app.get("/admin/trips")
+@app.get("/admin")
 def admin_trips():
     return render_template("pages/admin_trips.jinja")
 #-----------------------------------------------------------
-@app.get("/members")
+@app.get("/admin/members")
 def admin_members():
     search_text = request.args.get("q", "")  # get search term or empty string
     with connect_db() as client:

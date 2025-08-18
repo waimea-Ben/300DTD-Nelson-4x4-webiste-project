@@ -50,29 +50,3 @@
 
 
 {% endblock %}
-<javascript>
-document.querySelectorAll('.edit-button').forEach(button => {
-  button.addEventListener('click', async (e) => {
-    e.preventDefault();
-
-    const memberId = button.dataset.memberId;
-    // Fetch the form HTML from your server endpoint
-    const response = await fetch(`/members/${memberId}/edit`);
-    if (!response.ok) {
-      alert('Failed to load form');
-      return;
-    }
-    const formHtml = await response.text();
-
-    // Show popup and insert form HTML
-    document.getElementById('modalContent').innerHTML = formHtml;
-    document.getElementById('editModal').style.display = 'block';
-    document.getElementById('modalOverlay').style.display = 'block';
-  });
-});
-
-document.getElementById('closeModal').addEventListener('click', () => {
-  document.getElementById('editModal').style.display = 'none';
-  document.getElementById('modalOverlay').style.display = 'none';
-});
-</javascript>

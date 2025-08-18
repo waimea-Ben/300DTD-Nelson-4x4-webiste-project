@@ -1,0 +1,9 @@
+-- database: ./database.sqlite
+
+SELECT members.name,
+           members.vehicle
+           
+           FROM coming
+           JOIN members ON coming.user_id = members.id
+           WHERE coming.trip_id = 4
+           

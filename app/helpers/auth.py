@@ -28,3 +28,19 @@ def login_required(func):
     return wrapper
 
 
+
+
+def admin_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+
+        # Is the user an admin?
+        if session.get("is_admin"):
+            # Yes, so run the function
+            return func(*args, **kwargs)
+
+        # No, block them
+        flash("You must be an admin to access that page", "error")
+        return redirect("/")
+
+    return wrapper

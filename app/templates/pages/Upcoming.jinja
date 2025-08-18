@@ -1,0 +1,70 @@
+{#=====================================================
+  Thing page
+  - Shows details of a single thing
+  - Has a delete link to remove it
+=====================================================#}
+
+{% extends 'pages/base.jinja' %}
+
+
+{% block title %}
+
+    Upcoming Trips
+
+{% endblock %}
+
+
+{% block content %}
+
+    <h1>Upcoming Trips</h1>
+    <h2>Reserve a spot on a trip</h2>
+
+<div class="trip-card">
+    <h3>Available trips</h3>
+    <p>click on a trip to view full details<p>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Difficulty</th>
+                <th>Join</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for trip in upcoming_trips %}
+        <tr>
+            <td>
+                <a 
+    href="#"
+    hx-get="/trip/{{trip.id}}" 
+    hx-target="#overlay-content" 
+    hx-swap="innerHTML"
+    hx-trigger="click"
+    onclick="openOverlay();"
+>
+    {{ trip.name }}
+</a>
+
+            </td>
+            <td>{{ trip.location }}</td>
+            <td>{{ trip.date }}</td>
+            <td>{{ trip.grade }}</td>
+            <td>
+                <form method="post" action="{% if trip.id in joined_trip_ids %}/unjoin-trip/{{ trip.id }}{% else %}/join-trip/{{ trip.id }}{% endif %}">
+                    <button type="submit">
+                        {% if trip.id in joined_trip_ids %}Leave{% else %}Join{% endif %}
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+    </table>
+</div>
+
+{% endblock %}
+
+

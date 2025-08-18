@@ -14,7 +14,7 @@ from app.helpers.session import init_session
 from app.helpers.db      import connect_db
 from app.helpers.errors  import init_error, not_found_error
 from app.helpers.logging import init_logging
-from app.helpers.auth    import login_required
+from app.helpers.auth    import login_required, admin_required
 from app.helpers.time    import init_datetime, utc_timestamp, utc_timestamp_now
 
 
@@ -73,90 +73,90 @@ def past_trips():
 
 
 
-#-----------------------------------------------------------
-# Things page route - Show all the things, and new thing form
-#-----------------------------------------------------------
-@app.get("/things/")
-def show_all_things():
-    with connect_db() as client:
-        # Get all the things from the DB
-        sql = """
-            SELECT things.id,
-                   things.name,
-                   users.name AS owner
+# #-----------------------------------------------------------
+# # Things page route - Show all the things, and new thing form
+# #-----------------------------------------------------------
+# @app.get("/things/")
+# def show_all_things():
+#     with connect_db() as client:
+#         # Get all the things from the DB
+#         sql = """
+#             SELECT things.id,
+#                    things.name,
+#                    users.name AS owner
 
-            FROM things
-            JOIN users ON things.user_id = users.id
+#             FROM things
+#             JOIN users ON things.user_id = users.id
 
-            ORDER BY things.name ASC
-        """
-        params=[]
-        result = client.execute(sql, params)
-        things = result.rows
+#             ORDER BY things.name ASC
+#         """
+#         params=[]
+#         result = client.execute(sql, params)
+#         things = result.rows
 
-        # And show them on the page
-        return render_template("pages/things.jinja", things=things)
-
-
-#-----------------------------------------------------------
-# Thing page route - Show details of a single thing
-#-----------------------------------------------------------
-@app.get("/thing/<int:id>")
-def show_one_thing(id):
-    with connect_db() as client:
-        # Get the thing details from the DB, including the owner info
-        sql = """
-            SELECT things.id,
-                   things.name,
-                   things.price,
-                   things.user_id,
-                   users.name AS owner
-
-            FROM things
-            JOIN users ON things.user_id = users.id
-
-            WHERE things.id=?
-        """
-        params = [id]
-        result = client.execute(sql, params)
-
-        # Did we get a result?
-        if result.rows:
-            # yes, so show it on the page
-            thing = result.rows[0]
-            return render_template("pages/thing.jinja", thing=thing)
-
-        else:
-            # No, so show error
-            return not_found_error()
+#         # And show them on the page
+#         return render_template("pages/things.jinja", things=things)
 
 
-#-----------------------------------------------------------
-# Route for adding a thing, using data posted from a form
-# - Restricted to logged in users
-#-----------------------------------------------------------
-@app.post("/add")
-@login_required
-def add_a_thing():
-    # Get the data from the form
-    name  = request.form.get("name")
-    price = request.form.get("price")
+# #-----------------------------------------------------------
+# # Thing page route - Show details of a single thing
+# #-----------------------------------------------------------
+# @app.get("/thing/<int:id>")
+# def show_one_thing(id):
+#     with connect_db() as client:
+#         # Get the thing details from the DB, including the owner info
+#         sql = """
+#             SELECT things.id,
+#                    things.name,
+#                    things.price,
+#                    things.user_id,
+#                    users.name AS owner
 
-    # Sanitise the text inputs
-    name = html.escape(name)
+#             FROM things
+#             JOIN users ON things.user_id = users.id
 
-    # Get the user id from the session
-    user_id = session["user_id"]
+#             WHERE things.id=?
+#         """
+#         params = [id]
+#         result = client.execute(sql, params)
 
-    with connect_db() as client:
-        # Add the thing to the DB
-        sql = "INSERT INTO things (name, price, user_id) VALUES (?, ?, ?)"
-        params = [name, price, user_id]
-        client.execute(sql, params)
+#         # Did we get a result?
+#         if result.rows:
+#             # yes, so show it on the page
+#             thing = result.rows[0]
+#             return render_template("pages/thing.jinja", thing=thing)
 
-        # Go back to the home page
-        flash(f"Thing '{name}' added", "success")
-        return redirect("/things")
+#         else:
+#             # No, so show error
+#             return not_found_error()
+
+
+# #-----------------------------------------------------------
+# # Route for adding a thing, using data posted from a form
+# # - Restricted to logged in users
+# #-----------------------------------------------------------
+# @app.post("/add")
+# @login_required
+# def add_a_thing():
+#     # Get the data from the form
+#     name  = request.form.get("name")
+#     price = request.form.get("price")
+
+#     # Sanitise the text inputs
+#     name = html.escape(name)
+
+#     # Get the user id from the session
+#     user_id = session["user_id"]
+
+#     with connect_db() as client:
+#         # Add the thing to the DB
+#         sql = "INSERT INTO things (name, price, user_id) VALUES (?, ?, ?)"
+#         params = [name, price, user_id]
+#         client.execute(sql, params)
+
+#         # Go back to the home page
+#         flash(f"Thing '{name}' added", "success")
+#         return redirect("/things")
 
 
 #-----------------------------------------------------------
@@ -164,7 +164,7 @@ def add_a_thing():
 # - Restricted to logged in users
 #-----------------------------------------------------------
 @app.get("/members/<int:id>/delete")
-#@login_required
+@admin_required
 def delete_a_member(id):
 
     with connect_db() as client:
@@ -181,7 +181,7 @@ def delete_a_member(id):
 #-----------------------------------------------------------
     
 @app.get("/members/<int:member_id>/edit")
-#@login_required
+@admin_required
 def edit_member(member_id):
     with connect_db() as client:
         # Get the member details from the DB
@@ -203,25 +203,61 @@ def edit_member(member_id):
 #-----------------------------------------------------------
     
 @app.put("/members/<int:member_id>/edit")
-#@login_required
+@admin_required
 def update_member(member_id):
     with connect_db() as client:
-        # Get the member details from the form
-        # Run an UPDATE SQL statement to update the member
+        # Get data from the form
+        name = request.form.get("name")
+        new_password = request.form.get("password_hash")  # leave blank to keep existing
+        email = request.form.get("email")
+        number = request.form.get("number")
+        vehicle = request.form.get("vehicle")
+        admin = 1 if request.form.get("admin") == "true" else 0
 
-        # Get the updated record
-        sql = "SELECT * FROM members WHERE id=?"
-        params = [member_id]
-        result = client.execute(sql, params)
+        # Fetch the current member
+        sql_current = "SELECT * FROM members WHERE id = ?"
+        result = client.execute(sql_current, [member_id])
+        if not result.rows:
+            return not_found_error()
 
-        # Did we get a result?
-        if result.rows:
-            # yes, so show it on the page
-            member = result.rows[0]
-            return render_template("components/member_details.jinja", member=member)
+        member_data = result.rows[0]
 
+        # Decide which password hash to use
+        if new_password.strip():
+            password_hash = generate_password_hash(new_password)
         else:
-            # No, so show error
+            password_hash = member_data["password_hash"]
+
+        # Update the member
+        sql_update = """
+            UPDATE members
+            SET name = ?, 
+                password_hash = ?, 
+                email = ?, 
+                number = ?, 
+                vehicle = ?, 
+                admin = ?
+            WHERE id = ?
+        """
+        params_update = [
+            name,
+            password_hash,
+            email,
+            number,
+            vehicle,
+            admin,
+            member_id
+        ]
+        client.execute(sql_update, params_update)
+
+        # Fetch the updated member
+        sql_select = "SELECT * FROM members WHERE id = ?"
+        result = client.execute(sql_select, [member_id])
+
+        if result.rows:
+            updated_member = result.rows[0]
+            return render_template("components/member_details.jinja", member=updated_member)
+        else:
             return not_found_error()
 
 
@@ -237,6 +273,7 @@ def login_form():
 # Route for adding a user when registration form submitted
 #-----------------------------------------------------------
 @app.post("/add-user")
+@admin_required
 def add_user():
     # Get the data from the form
     name = request.form.get("name")
@@ -274,38 +311,39 @@ def add_user():
 #-----------------------------------------------------------
 # Route for processing a user login
 #-----------------------------------------------------------
+
 @app.post("/login-user")
-def login_user():
+def login_member():
     # Get the login form data
-    username = request.form.get("username")
+    email = request.form.get("email")
     password = request.form.get("password")
 
     with connect_db() as client:
-        # Attempt to find a record for that user
-        sql = "SELECT * FROM users WHERE username = ?"
-        params = [username]
+        # Attempt to find the member by email
+        sql = "SELECT * FROM members WHERE email = ?"
+        params = [email]
         result = client.execute(sql, params)
 
-        # Did we find a record?
         if result.rows:
-            # Yes, so check password
-            user = result.rows[0]
-            hash = user["password_hash"]
+            member = result.rows[0]
+            stored_hash = member["password_hash"]
 
-            # Hash matches?
-            if check_password_hash(hash, password):
-                # Yes, so save info in the session
-                session["user_id"]   = user["id"]
-                session["user_name"] = user["name"]
-                session["logged_in"] = True
+            # Check the password against the stored hash
+            if check_password_hash(stored_hash, password):
+                # Save info in the session
+                session["member_id"]   = member["id"]
+                session["member_name"] = member["name"]
+                session["logged_in"]   = True
+                session["is_admin"] = int(member["admin"]) == 1
 
-                # And head back to the home page
+
                 flash("Login successful", "success")
                 return redirect("/")
 
-        # Either username not found, or password was wrong
+        # Either member not found, or password incorrect
         flash("Invalid credentials", "error")
         return redirect("/login")
+
 
 
 #-----------------------------------------------------------
@@ -314,8 +352,9 @@ def login_user():
 @app.get("/logout")
 def logout():
     # Clear the details from the session
-    session.pop("user_id", None)
-    session.pop("user_name", None)
+    session.pop("member_id", None)
+    session.pop("member_name", None)
+    session.pop("is_admin", None)
     session.pop("logged_in", None)
 
     # And head back to the home page
@@ -326,15 +365,18 @@ def logout():
 # admin page route
 #-----------------------------------------------------------
 @app.get("/admin/settings")
+@admin_required
 def admin_settings():
     return render_template("pages/admin_settings.jinja")
 #-----------------------------------------------------------
 @app.get("/admin/trips")
 @app.get("/admin")
+@admin_required
 def admin_trips():
     return render_template("pages/admin_trips.jinja")
 #-----------------------------------------------------------
 @app.get("/admin/members")
+@admin_required
 def admin_members():
     search_text = request.args.get("q", "")  # get search term or empty string
     with connect_db() as client:
@@ -363,3 +405,98 @@ def admin_members():
        
 
 # #-----------------------------------------------------------
+@app.get("/upcoming/")
+@login_required
+def upcoming_trips():
+    member_id = session["member_id"]
+    with connect_db() as client:
+        # Get all upcoming trips
+        sql = """
+            SELECT *
+                             
+            FROM trips
+            
+            WHERE date(trips.date) >= date('now')
+            ORDER BY trips.date ASC
+        """
+        params = []
+        upcoming_result = client.execute(sql, params)
+        upcoming_trips = upcoming_result.rows
+
+        # Get trips the current user has already joined
+        joined_sql = "SELECT trip_id FROM coming WHERE user_id = ?"
+        joined_params = [member_id]
+        joined_result = client.execute(joined_sql, joined_params)
+        joined_trip_ids = [row["trip_id"] for row in joined_result.rows]
+
+    return render_template(
+        "pages/upcoming.jinja",
+        upcoming_trips=upcoming_trips,
+        joined_trip_ids=joined_trip_ids
+    )
+
+
+
+#-----------------------------------------------------------
+#join trip route
+@app.get("/trip/<int:trip_id>")
+@login_required
+def get_trip_details(trip_id):
+    with connect_db() as client:
+        # Get trip with leader name
+        sql = """
+        SELECT trips.*, members.name as leader_name
+        FROM trips
+        LEFT JOIN members ON trips.leader = members.id
+        WHERE trips.id=?
+        """
+        trip_result = client.execute(sql, [trip_id])
+        trip = trip_result.rows[0] if trip_result.rows else None
+
+
+        # Get attendees
+        sql = """
+        SELECT members.name, members.vehicle
+        FROM coming
+        JOIN members ON coming.user_id = members.id
+        WHERE coming.trip_id = ?
+        ORDER BY members.name ASC
+        """
+        attendees_result = client.execute(sql, [trip_id])
+        attendees = attendees_result.rows if attendees_result.rows else []
+
+    return render_template(
+        "components/trip_details.jinja",
+        trip=trip,
+        attendees=attendees
+    )
+
+
+#-----------------------------------------------------------
+#join trip route
+@app.post("/join-trip/<int:trip_id>")
+@login_required
+def join_trip(trip_id):
+    member_id = session["member_id"]
+    with connect_db() as client:
+        # Avoid duplicate joins
+        check = client.execute("SELECT * FROM coming WHERE user_id=? AND trip_id=?", [member_id, trip_id])
+        if not check.rows:
+            client.execute("INSERT INTO coming (user_id, trip_id) VALUES (?, ?)", [member_id, trip_id])
+    flash("You joined the trip!", "success")
+    return redirect("/upcoming/")
+
+#-----------------------------------------------------------
+#leave trip route
+@app.post("/unjoin-trip/<int:trip_id>")
+@login_required
+def unjoin_trip(trip_id):
+    member_id = session["member_id"]
+    with connect_db() as client:
+        # Remove the user from the coming table
+        client.execute(
+            "DELETE FROM coming WHERE user_id = ? AND trip_id = ?",
+            [member_id, trip_id]
+        )
+    flash("You left the trip.", "info")
+    return redirect("/upcoming/")

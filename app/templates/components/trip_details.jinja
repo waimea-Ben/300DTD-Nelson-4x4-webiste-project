@@ -1,0 +1,40 @@
+<div>
+<div style="text-align:right;">
+    <a href="#"
+       onclick="document.getElementById('overlay').style.display='none'; return false;">X</a>
+</div>
+
+    <h1>{{trip.name}}</h1>
+    <p>{{trip.location}} {{trip.date}}</p>
+
+    <article>
+        <h2>Trip location and directions</h2>
+        <p>map</p>
+        <article id="destination">
+            <h3>Trip Destination</h3>
+            <p>{{trip.location}}</p>
+        </article>
+
+        <article id="meeting">
+            <h3>Meeting Point</h3>
+            <p>{{trip.meeting}}</p>
+        </article>
+    </article>
+
+    <article>
+        <h2>Trip Overview</h2>
+        <p>{{trip.notes}}</p>
+        <p><strong>Trip Leader:</strong> {{ trip.leader_name or 'TBA' }}</p>
+        <p><strong>Difficulty:</strong> {{trip.grade}}</p>
+        <p><strong>Meeting Time:</strong>{{trip.date}}</p>
+    </article>
+
+    <article>
+        <h2>Attendees</h2>
+        <ul>
+            {% for a in attendees %}
+                <li>{{a.name}} ({{a.vehicle}})</li>
+            {% endfor %}
+        </ul>
+    </article>
+</div>

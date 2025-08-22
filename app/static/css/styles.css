@@ -67,4 +67,10 @@
   }
   
   
+  .leaflet-marker-icon {
+    background: none !important;   /* remove any background */
+    border: none !important;       /* remove any border */
+    box-shadow: none !important;   /* remove any shadow */
+    padding: 0 !important;         /* remove padding */
+  }
   

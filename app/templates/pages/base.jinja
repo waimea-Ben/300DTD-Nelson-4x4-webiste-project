@@ -28,47 +28,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.slate.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css">
     <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
-{#--------------------------------------------------------------- #}
-<!-- Overlay -->
-<div id="overlay" 
-     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-  
-  <!-- Popup content -->
-  <div id="overlay-content" 
-       style="background:#fff; margin:50px auto; padding:20px; width:80%; max-height:80%; overflow-y:auto; position:relative;">
-    
-    <!-- X button inside the scrollable content -->
-    <div style="text-align:right;">
-      <button onclick="closeOverlay()">X</button>
-    </div>
-    
-    <!-- Trip details will load here -->
-  </div>
-</div>
-
-<script>
-function openOverlay() {
-  document.getElementById("overlay").style.display = "block";
-}
-
-function closeOverlay() {
-  document.getElementById("overlay").style.display = "none";
-}
-
-// Close overlay if clicking outside the popup content
-document.getElementById("overlay").addEventListener("click", function(e) {
-  if (e.target.id === "overlay") {
-    closeOverlay();
-  }
-});
-</script>
-
-
-
-
-
-
 
 <body>
 
@@ -127,6 +89,117 @@ document.getElementById("overlay").addEventListener("click", function(e) {
 
     {# Show debug info. Comment this out if not needed #}
     {% include "components/debug.jinja" %}
+
+    <div id="overlay" 
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+      
+      <!-- Popup content -->
+      <div id="overlay-content" 
+          style="background:#fff; margin:50px auto; padding:20px; width:80%; max-height:80%; overflow-y:auto; position:relative;"
+      >
+        <div id="trip-info"></div>
+        <div id="map" style="height: 400px; width: 100%; border-radius: 8px;"></div>
+        <!-- X button inside the scrollable content -->
+        <div style="text-align:right;">
+          <button onclick="closeOverlay()">X</button>
+        </div>
+        
+        <!-- Trip details will load here -->
+      </div>
+    </div>
+
+  
+    <script>
+      function openOverlay() {
+        document.getElementById("overlay").style.display = "block";
+      }
+
+      function closeOverlay() {
+        document.getElementById("overlay").style.display = "none";
+      }
+
+      // Close overlay if clicking outside the popup content
+      document.getElementById("overlay").addEventListener("click", function(e) {
+        if (e.target.id === "overlay") {
+          closeOverlay();
+        }
+      });
+
+
+      const map = L.map('map').setView([-41, 174], 6); 
+      
+      console.log("START: ", map)
+      
+      // start centered on NZ
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+        // Custom icons for large markers
+      const meetingIcon = L.icon({
+        iconUrl: '/static/images/meeting-point.png',
+        iconSize: [28, 41],       // half size
+        iconAnchor: [14, 41],     // bottom center of the icon
+        popupAnchor: [0, -41]     // popup appears above the marker
+      });
+
+      const tripIcon = L.icon({
+        iconUrl: '/static/images/trip-destination.png',
+        iconSize: [28, 41],       
+        iconAnchor: [14, 41],     
+        popupAnchor: [0, -41]     
+      });
+
+
+
+      function loadMap(meeting, location) {
+      markers.clearLayers();
+        const bounds=[]
+
+        console.log("LOADING...")
+
+        const places = [
+          { name: "Meeting Point", location: meeting, icon: meetingIcon },
+          { name: "Trip Location", location: location, icon: tripIcon }
+        ];
+
+        console.log(places)
+
+        places.forEach(place => {
+          fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=nz&q=${encodeURIComponent(place.location)}`, {
+            headers: { 'User-Agent': 'YourAppName/1.0 (your@email.com)' }
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.length > 0) {
+                const lat = parseFloat(data[0].lat);
+                const lon = parseFloat(data[0].lon);
+
+                console.log(lat, lon)
+                
+
+                L.marker([lat, lon], { icon: place.icon }).addTo(map)
+                  .bindPopup(`<b>${place.name}</b><br>${place.location}`);
+
+                bounds.push([lat, lon]);
+
+                if (bounds.length === places.length) {
+                  map.fitBounds(bounds);
+                }
+              }
+            })
+            .catch(err => console.error("Geocoding failed for", place.location, err));
+        });
+
+        console.log(bounds)
+
+        console.log(L)
+
+        console.log(map)
+
+
+      }
+    </script>
 
 </body>
 

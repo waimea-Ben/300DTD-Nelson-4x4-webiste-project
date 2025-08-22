@@ -33,19 +33,20 @@
             </tr>
         </thead>
         <tbody>
+
         {% for trip in upcoming_trips %}
         <tr>
             <td>
                 <a 
-    href="#"
-    hx-get="/trip/{{trip.id}}" 
-    hx-target="#overlay-content" 
-    hx-swap="innerHTML"
-    hx-trigger="click"
-    onclick="openOverlay();"
->
-    {{ trip.name }}
-</a>
+                    href="#"
+                    hx-get="/trip/{{trip.id}}" 
+                    hx-target="#trip-info" 
+                    hx-swap="outerHTML"
+                    hx-trigger="click"
+                    onclick="openOverlay(); setTimeout(() => {loadMap(`{{ trip.meeting }}`, `{{ trip.location }}`)}, 500);"
+                >
+                    {{ trip.name }}
+                </a>
 
             </td>
             <td>{{ trip.location }}</td>

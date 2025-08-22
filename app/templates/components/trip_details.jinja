@@ -1,23 +1,27 @@
-<div>
-<div style="text-align:right;">
-    <a href="#"
-       onclick="document.getElementById('overlay').style.display='none'; return false;">X</a>
-</div>
+<div id="trip-info">
+    <div style="text-align:right;">
+        <a href="#"
+        onclick="document.getElementById('overlay').style.display='none'; return false;">X</a>
+    </div>
 
     <h1>{{trip.name}}</h1>
     <p>{{trip.location}} {{trip.date}}</p>
 
     <article>
         <h2>Trip location and directions</h2>
-        <p>map</p>
+        {# <div id="map" style="height: 400px; width: 100%; border-radius: 8px;"></div> #}
+
         <article id="destination">
             <h3>Trip Destination</h3>
             <p>{{trip.location}}</p>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}" target="_blank"><button>Open in Maps</button></a>
         </article>
 
         <article id="meeting">
             <h3>Meeting Point</h3>
             <p>{{trip.meeting}}</p>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}" target="_blank"><button>Open in Maps</button></a>
+
         </article>
     </article>
 
@@ -26,15 +30,28 @@
         <p>{{trip.notes}}</p>
         <p><strong>Trip Leader:</strong> {{ trip.leader_name or 'TBA' }}</p>
         <p><strong>Difficulty:</strong> {{trip.grade}}</p>
-        <p><strong>Meeting Time:</strong>{{trip.date}}</p>
+        <p><strong>Meeting Time:</strong> {{trip.date}}</p>
     </article>
 
     <article>
-        <h2>Attendees</h2>
-        <ul>
+        <h2>Participants</h2>
             {% for a in attendees %}
-                <li>{{a.name}} ({{a.vehicle}})</li>
+            <article>
+                <h4>{{a.name}}</h4>
+                <p>{{a.vehicle}}</p>
+            </article>
             {% endfor %}
-        </ul>
+    </article>
+
+    <article>
+        <h2>Required Gear & Equipment</h2>
+        <li>Recovery gear (snatch strap, shackles, bow shackles)</li>
+        <li>Winch or come-along (optional)</li>
+        <li>First aid kit</li>
+        <li>UHF radio (channel 20)</li>
+        <li>Spare tire and repair kit</li>
+        <li>food and water</li>
+        <li>Warm clothing and rain gear</li>
+        <li>Torch/headlamp with spare batteries</li>
     </article>
 </div>

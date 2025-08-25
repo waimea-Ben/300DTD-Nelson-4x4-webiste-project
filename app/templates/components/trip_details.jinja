@@ -7,23 +7,7 @@
     <h1>{{trip.name}}</h1>
     <p>{{trip.location}} {{trip.date}}</p>
 
-    <article>
-        <h2>Trip location and directions</h2>
-        {# <div id="map" style="height: 400px; width: 100%; border-radius: 8px;"></div> #}
-
-        <article id="destination">
-            <h3>Trip Destination</h3>
-            <p>{{trip.location}}</p>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}" target="_blank"><button>Open in Maps</button></a>
-        </article>
-
-        <article id="meeting">
-            <h3>Meeting Point</h3>
-            <p>{{trip.meeting}}</p>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}" target="_blank"><button>Open in Maps</button></a>
-
-        </article>
-    </article>
+    
 
     <article>
         <h2>Trip Overview</h2>
@@ -53,5 +37,22 @@
         <li>food and water</li>
         <li>Warm clothing and rain gear</li>
         <li>Torch/headlamp with spare batteries</li>
+    </article>
+
+    <article>
+        <h2>Trip location and directions</h2>
+
+        <article id="destination">
+            <img src="/static/images/trip-destination.png" style="height: auto; width: 1rem;"><h3>Trip Destination</h3>
+            <p>{{trip.location}}</p>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}" target="_blank"><button>Open in Maps</button></a>
+        </article>
+
+        <article id="meeting">
+            <img src="/static/images/meeting-point.png" style="height: auto; width: 1rem;"><h3>Meeting Point</h3>
+            <p>{{trip.meeting}}</p>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}" target="_blank"><button>Open in Maps</button></a>
+
+        </article>
     </article>
 </div>

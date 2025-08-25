@@ -43,7 +43,7 @@
                     hx-target="#trip-info" 
                     hx-swap="outerHTML"
                     hx-trigger="click"
-                    onclick="openOverlay(); setTimeout(() => {loadMap(`{{ trip.meeting }}`, `{{ trip.location }}`)}, 500);"
+                    onclick="openOverlay(); setTimeout(() => {loadMap(`{{ trip.meeting }}`, `{{ trip.location }}`)}, 50);"
                 >
                     {{ trip.name }}
                 </a>
@@ -66,6 +66,40 @@
     </table>
 </div>
 
+<div id="upcoming-extras">
+<article id="What-to-bring">
+    <header>
+        <h2>What to bring</h2>
+    </header>
+    <ul>
+        <li>Recovery gear (snatch strap, shackles, bow shackles)</li>
+        <li>Winch or come-along (optional)</li>
+        <li>First aid kit</li>
+        <li>UHF radio (channel 20)</li>
+        <li>Spare tire and repair kit</li>
+        <li>food and water</li>
+        <li>Warm clothing and rain gear</li>
+        <li>Torch/headlamp with spare batteries</li>
+    </ul>
+</article>
+
+<article id="guidelines">
+    <header>
+        <h2>Guidlines</h2>
+    </header>
+    <ul>
+        <li>All participants must have a 4WD vehicle in good working condition.</li>
+        <li>Drivers should have basic off-road driving skills and knowledge of vehicle recovery techniques.</li>
+        <li>Participants must carry the required gear and equipment listed above.</li>
+        <li>Follow the instructions of the trip leader at all times.</li>
+        <li>Respect the environment and adhere to the principles of Leave No Trace.</li>
+        <li>Never loose sight of vehicle behindt you.</li>
+        <li>Ensure your vehicle is fueled and serviced before the trip.</li>
+        <li>Inform the trip leader of any medical conditions or special requirements.</li>
+
+    </ul>
+</article>
+</div>
 {% endblock %}
 
 

@@ -1,0 +1,16 @@
+
+  <h3>{{ trips.name }}</h3>
+  <p><strong>Location:</strong> {{ trips.location }}</p>
+  <p><strong>Date:</strong> {{ trips.date }}</p>
+  <p><strong>Leader:</strong> {{ trips.leader_name }}</p>
+  <p><strong>Difficulty:</strong> {{ trips.grade }}</p>
+  <p>{{ trips.description }}</p>
+
+  <button 
+      hx-get="/trips/{{ trips.id }}/edit"
+      hx-target="#trip-{{ trips.id }}"
+      hx-swap="innerHTML"
+  >
+    Edit
+  </button>
+

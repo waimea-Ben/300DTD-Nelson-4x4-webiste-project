@@ -1,0 +1,25 @@
+<form 
+    hx-put="/trips/{{ trips.id }}/edit"
+    hx-target="#trip-{{ trips.id }}"
+    hx-swap="innerHTML"
+>
+  <label>Name:</label>
+  <input type="text" name="name" value="{{ trips.name }}" required><br>
+
+  <label>Location:</label>
+  <input type="text" name="location" value="{{ trips.location }}" required><br>
+
+  <label>Date:</label>
+  <input type="date" name="date" value="{{ trips.date }}" required><br>
+
+  <label>leader:</label>
+  <input type="text" name="leader" value="{{ trips.leader_name }}"><br>
+
+  <label>Difficulty:</label>
+  <input type="text" name="difficulty" value="{{ trips.grade }}"><br>
+
+<label>Description:</label>
+<textarea name="description" rows="4" cols="50">{{ trips.description }}</textarea><br>
+
+  <button type="submit">Save</button>
+</form>

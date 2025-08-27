@@ -260,6 +260,64 @@ def update_member(member_id):
         else:
             return not_found_error()
 
+#-----------------------------------------------------------
+# TRIP EDIT ROUTES
+@app.get("/trips/<int:trip_id>/edit")
+@admin_required
+def edit_trip(trip_id):
+    with connect_db() as client:
+        # Get the member details from the DB
+        sql = "SELECT * FROM trips WHERE id=?"
+        params = [trip_id]
+        result = client.execute(sql, params)
+
+        # Did we get a result?
+        if result.rows:
+            # yes, so show it on the page
+            trips = result.rows[0]
+            return render_template("components/admin_trip_form.jinja", trips=trips)
+
+        else:
+            # No, so show error
+            return not_found_error()       
+
+
+@app.put("/trips/<int:trip_id>/edit")
+@admin_required
+def update_trips(trip_id):
+    with connect_db() as client:
+        # Get data from the form
+        name = request.form.get("name")
+        location = request.form.get("location")  # leave blank to keep existing
+        date = request.form.get("date")
+        leader = request.form.get("leader")
+        grade = request.form.get("difficulty")
+
+
+        # Update the member
+        sql_update = """
+            UPDATE trips
+            SET name = ?, 
+                location = ?, 
+                date = ?, 
+                leader = ?, 
+                grade = ? 
+            WHERE id = ?
+        """
+        params_update = [name, location, date, leader, grade, trip_id]
+
+        client.execute(sql_update, params_update)
+
+        # Fetch the updated member
+        sql_select = "SELECT * FROM trips WHERE id = ?"
+        result = client.execute(sql_select, [trip_id])
+
+        if result.rows:
+            trips = result.rows[0]
+            return render_template("components/admin_trip_details.jinja", trips=trips)
+        else:
+            return not_found_error()
+
 
 #-----------------------------------------------------------
 # User login form route
@@ -372,8 +430,32 @@ def admin_settings():
 @app.get("/admin/trips")
 @app.get("/admin")
 @admin_required
-def admin_trips():
-    return render_template("pages/admin_trips.jinja")
+def search_admin_trips():
+    search_text = request.args.get("q", "")  # get search term or empty string
+    with connect_db() as client:
+        sql = """
+        SELECT trips.*, members.name as leader_name
+        FROM trips
+        LEFT JOIN members ON trips.leader = members.id
+        WHERE (
+                  trips.name LIKE ?
+                  OR trips.location LIKE ?
+              )
+        ORDER BY trips.name ASC
+        """
+        search_param = f"%{search_text}%"
+        params = [search_param, search_param]
+        result = client.execute(sql, params)
+
+        if result.rows:
+            trips = result.rows
+            return render_template("pages/admin_trips.jinja", trips=trips, search_text=search_text, no_results=False)
+        else:
+            # No results found — pass a flag to template or return a custom message
+            return render_template("pages/admin_trips.jinja", trips=[], search_text=search_text, no_results=True)
+
+
+       
 #-----------------------------------------------------------
 @app.get("/admin/members")
 @admin_required
@@ -500,3 +582,6 @@ def unjoin_trip(trip_id):
         )
     flash("You left the trip.", "info")
     return redirect("/upcoming/")
+
+
+#-----------------------------------------------------------

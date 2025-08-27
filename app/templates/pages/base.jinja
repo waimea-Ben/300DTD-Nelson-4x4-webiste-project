@@ -41,12 +41,7 @@
             </ul>
 
             <ul>
-                {% if session.member_name %}
-
-                    <li>Hello, {{ session.member_name }}</li>
-
-                {% endif %}
-
+            
                 <li><a href="/">Home</a></li>
                 <li><a href="/past">Past</a></li>
 
@@ -60,8 +55,12 @@
                     <li><a href="/admin">Admin</a></li>
                     
                 {% endif %}
+                  {% if session.member_name %}
 
-                <li><a href="/logout">Logout</a></li>
+                      <li>Hello, {{ session.member_name }}</li>
+
+                  {% endif %}
+                <li><a href="/logout"></a></li>
 
                 {% else %}
 

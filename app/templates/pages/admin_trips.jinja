@@ -22,6 +22,29 @@
         <a href="/admin/members" class="tab">Members</a>
     </div>  
 
+    <section id="trips-list">
+    <header>
+    <br>
+        <h2>Trip Management</h2>
+        <p>Create, edit, and manage club trips</p>
+    </header>
+
+    <form action="/admin/trips" method="get">
+        <input type="text" name="q" value="{{ search_text }}" placeholder="Search trips...">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if trips %}
+        {% for trip in trips %}
+            <article id="trip-{{ trip.id }}">
+                {% include 'components/admin_trip_details.jinja' %}
+            </article>
+        {% endfor %}
+    {% else %}
+        <p>No trips found.</p>
+    {% endif %}
+
+</section>
 
 {% endblock %}
 

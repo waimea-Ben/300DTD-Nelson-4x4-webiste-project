@@ -27,6 +27,10 @@
     <br>
         <h2>Trip Management</h2>
         <p>Create, edit, and manage club trips</p>
+
+        {% for member in members %}
+            <p>{{ member.name }}</p>
+        {% endfor %}
     </header>
 
     <form action="/admin/trips" method="get">
@@ -34,9 +38,11 @@
         <button type="submit">Search</button>
     </form>
 
+
+    
     {% if trips %}
-        {% for trip in trips %}
-            <article id="trip-{{ trip.id }}">
+        {% for trips in trips %}
+            <article id="trip-{{ trips.id }}">
                 {% include 'components/admin_trip_details.jinja' %}
             </article>
         {% endfor %}

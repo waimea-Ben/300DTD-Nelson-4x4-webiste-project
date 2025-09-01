@@ -45,7 +45,7 @@ def connect_db():
         def logged_execute(sql, *params, **kwargs):
             # Store for later error handling
             app.dbSQL = sql
-            app.dbParams = params[0]
+            app.dbParams = params[0] if params else None
 
             # Log and run the query
             log_db_request(app, sql, params)

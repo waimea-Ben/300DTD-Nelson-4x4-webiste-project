@@ -3,23 +3,41 @@
     hx-target="#trip-{{ trips.id }}"
     hx-swap="innerHTML"
 >
-  <label>Name:</label>
-  <input type="text" name="name" value="{{ trips.name }}" required><br>
+  <label>Name:
+  <input type="text" name="name" value="{{ trips.name }}" required>
+  </label>
 
-  <label>Location:</label>
-  <input type="text" name="location" value="{{ trips.location }}" required><br>
+  <label>Location:
+  <input type="text" name="location" value="{{ trips.location }}" required>
+  </label>
 
-  <label>Date:</label>
-  <input type="date" name="date" value="{{ trips.date }}" required><br>
+  <label>Date:
+  <input type="date" name="date" value="{{ trips.date }}" required>
+  </label>
 
-  <label>leader:</label>
-  <input type="text" name="leader" value="{{ trips.leader_name }}"><br>
+  <label for="leader">Leader:</label>
+  <select name="leader" id="leader">
+    {% for member in members %}
+      <option value="{{ member.id }}" 
+        {% if trips.leader == member.id %} selected {% endif %}>
+        {{ member.name }}
+      </option>
+    {% endfor %}
+  </select>
 
-  <label>Difficulty:</label>
-  <input type="text" name="difficulty" value="{{ trips.grade }}"><br>
 
-<label>Description:</label>
-<textarea name="description" rows="4" cols="50">{{ trips.description }}</textarea><br>
+  <label for="difficulty">Difficulty:</label>
+    <select id="difficulty" name="difficulty">
+      <option value="Easy" {% if trips.grade == "Easy" %}selected{% endif %}>Easy</option>
+
+      <option value="Moderate" {% if trips.grade == "Moderate" %}selected{% endif %}>Moderate</option>
+
+      <option value="Challenging" {% if trips.grade == "Challenging" %}selected{% endif %}>Challenging</option>
+    </select>
+
+<label>summary:
+  <textarea name="summary" rows="4" cols="50">{{ trips.summary }}</textarea>
+</label>
 
   <button type="submit">Save</button>
 </form>

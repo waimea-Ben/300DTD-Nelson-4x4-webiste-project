@@ -271,6 +271,9 @@ def edit_trip(trip_id):
         params = [trip_id]
         result = client.execute(sql, params)
 
+        sql_members = "SELECT id, name FROM members ORDER BY name"
+        members_result = client.execute(sql_members)
+
         # Did we get a result?
         if result.rows:
             # yes, so show it on the page
@@ -286,37 +289,53 @@ def edit_trip(trip_id):
 @admin_required
 def update_trips(trip_id):
     with connect_db() as client:
-        # Get data from the form
-        name = request.form.get("name")
-        location = request.form.get("location")  # leave blank to keep existing
-        date = request.form.get("date")
-        leader = request.form.get("leader")
-        grade = request.form.get("difficulty")
+        # ------------------ Handle form submission ------------------
+        if request.form:
+            # Get data from the form
+            name = request.form.get("name")
+            location = request.form.get("location")
+            date = request.form.get("date")
+            leader = request.form.get("leader")  # this will be the member ID
+            grade = request.form.get("difficulty")
+            summary = request.form.get("summary")
 
+            # Update the trip in the database
+            sql_update = """
+                UPDATE trips
+                SET name = ?, 
+                    location = ?, 
+                    date = ?, 
+                    leader = ?, 
+                    grade = ?, 
+                    summary = ?
+                WHERE id = ?
+            """
+            params_update = [name, location, date, leader, grade, summary, trip_id]
+            client.execute(sql_update, params_update)
 
-        # Update the member
-        sql_update = """
-            UPDATE trips
-            SET name = ?, 
-                location = ?, 
-                date = ?, 
-                leader = ?, 
-                grade = ? 
-            WHERE id = ?
+        # ------------------ Fetch trip and members for the form ------------------
+        sql_trip = """
+            SELECT trips.*, members.name AS leader_name
+            FROM trips
+            LEFT JOIN members ON trips.leader = members.id
+            WHERE trips.id = ?
         """
-        params_update = [name, location, date, leader, grade, trip_id]
+        trip_result = client.execute(sql_trip, [trip_id])
 
-        client.execute(sql_update, params_update)
+        sql_members = "SELECT id, name FROM members ORDER BY name"
+        members_result = client.execute(sql_members)
 
-        # Fetch the updated member
-        sql_select = "SELECT * FROM trips WHERE id = ?"
-        result = client.execute(sql_select, [trip_id])
-
-        if result.rows:
-            trips = result.rows[0]
-            return render_template("components/admin_trip_details.jinja", trips=trips)
+        if trip_result.rows:
+            trip = trip_result.rows[0]
+            members = members_result.rows
+            return render_template(
+                "components/admin_trip_details.jinja",
+                trips=trip,
+                members=members
+            )
         else:
             return not_found_error()
+
 
 
 #-----------------------------------------------------------

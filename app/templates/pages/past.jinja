@@ -23,11 +23,20 @@
 {% for trip in past_trips %}
             <article>
             <header>
-                <h2>{{ trip.name }}</h2> <p>{{ trip.date }}</p>
+                <h2>{{ trip.name }}</h2> <p>{{ trip.date }}</p><p>Led by {{trip.leader_name}}</p>
             </header>
 
                 <p>{{ trip.location }}</p>
                 <p>{{ trip.summary }}</p>
+
+                    {% for photo in trip %}
+                        {% if photo.image_data %}
+                            <div>
+                                <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200">
+                                <small>{{ photo.credits }}</small>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
 
 
             </article>

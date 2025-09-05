@@ -18,8 +18,10 @@
   <label for="leader">Leader:</label>
   <select name="leader" id="leader">
     {% for member in members %}
-      <option value="{{ member.id }}" ftlog
-        {% if trips.leader == member.id %} selected {% endif %}>
+      <option 
+        value="{{ member.id }}"
+        {% if trips.leader == member.id %} selected {% endif %}
+      >
         {{ member.name }}
       </option>
     {% endfor %}

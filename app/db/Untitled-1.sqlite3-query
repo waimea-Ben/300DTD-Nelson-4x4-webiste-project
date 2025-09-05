@@ -1,0 +1,7 @@
+-- database: ./database.sqlite
+
+SELECT trips.*, trip_photos.*
+            FROM trips
+            LEFT JOIN trip_photos ON trip_photos.trip_id = trips.id
+            WHERE date(trips.date) < date('now')
+            ORDER BY trips.date DESC;

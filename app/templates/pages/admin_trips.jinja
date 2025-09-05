@@ -24,7 +24,7 @@
 
     <section id="trips-list">
     <header>
-    <br>
+        <br>
         <h2>Trip Management</h2>
         <p>Create, edit, and manage club trips</p>
 
@@ -38,19 +38,33 @@
         <button type="submit">Search</button>
     </form>
 
+    {% if not no_results %}
+        <h3>Upcoming Trips</h3>
+        {% if future_trips %}
+            {% for trips in future_trips %}
+                <article id="trip-{{ trips.id }}">
+                    {% include 'components/admin_trip_details.jinja' %}
+                </article>
+            {% endfor %}
+        {% else %}
+            <p>No upcoming trips found  matching "{{ search_text }}"</p>
+        {% endif %}
 
-    
-    {% if trips %}
-        {% for trips in trips %}
-            <article id="trip-{{ trips.id }}">
-                {% include 'components/admin_trip_details.jinja' %}
-            </article>
-        {% endfor %}
+        <h3>Past Trips</h3>
+        {% if past_trips %}
+            {% for trips in past_trips %}
+                <article id="trip-{{ trips.id }}">
+                    {% include 'components/admin_trip_details.jinja' %}
+                </article>
+            {% endfor %}
+        {% else %}
+            <p>No past trips found  matching "{{ search_text }}"</p>
+        {% endif %}
     {% else %}
-        <p>No trips found.</p>
+        <p>No trips found matching "{{ search_text }}".</p>
     {% endif %}
-
 </section>
+
 
 {% endblock %}
 

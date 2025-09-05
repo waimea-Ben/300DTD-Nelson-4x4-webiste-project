@@ -1,16 +1,34 @@
+<h3>{{ trips.name }}</h3>
+<p><strong>Location:</strong> {{ trips.location }}</p>
+<p><strong>Date:</strong> {{ trips.date }}</p>
+<p><strong>Leader:</strong> {{ trips.leader_name }}</p>
+<p><strong>Difficulty:</strong> {{ trips.grade }}</p>
+<p>{{ trips.description }}</p>
 
-  <h3>{{ trips.name }}</h3>
-  <p><strong>Location:</strong> {{ trips.location }}</p>
-  <p><strong>Date:</strong> {{ trips.date }}</p>
-  <p><strong>Leader:</strong> {{ trips.leader_name }}</p>
-  <p><strong>Difficulty:</strong> {{ trips.grade }}</p>
-  <p>{{ trips.description }}</p>
+{# {% if photos %}
+    {% for photo in photos %}
+        <div>
+            <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200"><br>
+            <small>{{ photo.credits }}</small>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No photos yet.</p>
+{% endif %} #}
 
-  <button 
-      hx-get="/trips/{{ trips.id }}/edit"
-      hx-target="#trip-{{ trips.id }}"
-      hx-swap="innerHTML"
-  >
+
+<button 
+    hx-get="/trips/{{ trips.id }}/edit"
+    hx-target="#trip-{{ trips.id }}"
+    hx-swap="innerHTML">
     Edit
-  </button>
+</button>
 
+<a href="/trips/{{ trips.id }}/delete">Delete</a>
+
+<button 
+    hx-get="/trips/{{ trips.id }}/add-photos"
+    hx-target="#trip-{{ trips.id }}"
+    hx-swap="innerHTML">
+    Add photos  
+</button>

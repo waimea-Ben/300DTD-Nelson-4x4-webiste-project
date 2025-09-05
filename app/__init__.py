@@ -9,6 +9,7 @@
 from flask import Flask, render_template, request, flash, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import html
+import base64
 
 from app.helpers.session import init_session
 from app.helpers.db      import connect_db
@@ -16,16 +17,23 @@ from app.helpers.errors  import init_error, not_found_error
 from app.helpers.logging import init_logging
 from app.helpers.auth    import login_required, admin_required
 from app.helpers.time    import init_datetime, utc_timestamp, utc_timestamp_now
-
+from datetime import *
 
 # Create the app
 app = Flask(__name__)
+
+@app.template_filter('b64encode')
+def b64encode_filter(data):
+    if data is None:
+        return ""
+    return base64.b64encode(data).decode()
 
 # Configure app
 init_session(app)   # Setup a session for messages, etc.
 init_logging(app)   # Log requests
 init_error(app)     # Handle errors and exceptions
 init_datetime(app)  # Handle UTC dates in timestamps
+
 
 
 #-----------------------------------------------------------
@@ -56,21 +64,21 @@ def home_past_trips():
 @app.get("/past/")
 def past_trips():
     with connect_db() as client:
-        # Get all the things from the DB
+        # Get all past trips
         sql = """
-            SELECT *
-
+            SELECT trips.*, trip_photos.*
             FROM trips
+            LEFT JOIN trip_photos ON trip_photos.trip_id = trips.id
             WHERE date(trips.date) < date('now')
-            ORDER BY trips.date DESC
+            ORDER BY trips.date DESC;
+
         """
-        params=[]
-        result = client.execute(sql, params)
-        past_trips = result.rows
+        result = client.execute(sql)
+        past_trips = result.rows 
 
-        # And show them on the page
-        return render_template("pages/past.jinja",  past_trips = past_trips)
 
+
+    return render_template("pages/past.jinja", past_trips=past_trips)
 
 
 # #-----------------------------------------------------------
@@ -278,7 +286,7 @@ def edit_trip(trip_id):
         if result.rows:
             # yes, so show it on the page
             trips = result.rows[0]
-            return render_template("components/admin_trip_form.jinja", trips=trips)
+            return render_template("components/admin_trip_form.jinja", trips=trips, members=members_result)
 
         else:
             # No, so show error
@@ -335,6 +343,22 @@ def update_trips(trip_id):
             )
         else:
             return not_found_error()
+
+#-----------------------------------------------------------
+#trip delete route
+        
+@app.get("/trips/<int:trip_id>/delete")
+@admin_required
+def delete_a_trip(trip_id):
+    with connect_db() as client:
+        # Delete the trip from the DB
+        sql = "DELETE FROM trips WHERE id=?"
+        params = [trip_id]
+        client.execute(sql, params)
+
+        # Go back to the home page
+        flash("Trip Deleted", "success")
+        return redirect("/admin/trips")
 
 
 
@@ -451,8 +475,11 @@ def admin_settings():
 @admin_required
 def search_admin_trips():
     search_text = request.args.get("q", "")  # get search term or empty string
+    search_param = f"%{search_text}%"
+
     with connect_db() as client:
-        sql = """
+        # Past trips
+        sql_past = """
         SELECT trips.*, members.name as leader_name
         FROM trips
         LEFT JOIN members ON trips.leader = members.id
@@ -460,18 +487,38 @@ def search_admin_trips():
                   trips.name LIKE ?
                   OR trips.location LIKE ?
               )
-        ORDER BY trips.name ASC
+          AND date(trips.date) < date('now')
+        ORDER BY trips.date DESC
         """
-        search_param = f"%{search_text}%"
-        params = [search_param, search_param]
-        result = client.execute(sql, params)
+        past_trips = client.execute(sql_past, [search_param, search_param]).rows
 
-        if result.rows:
-            trips = result.rows
-            return render_template("pages/admin_trips.jinja", trips=trips, search_text=search_text, no_results=False)
-        else:
-            # No results found — pass a flag to template or return a custom message
-            return render_template("pages/admin_trips.jinja", trips=[], search_text=search_text, no_results=True)
+        # Future trips
+        sql_future = """
+        SELECT trips.*, members.name as leader_name
+        FROM trips
+        LEFT JOIN members ON trips.leader = members.id
+        WHERE (
+                  trips.name LIKE ?
+                  OR trips.location LIKE ?
+              )
+          AND date(trips.date) >= date('now')
+        ORDER BY trips.date ASC
+        """
+        future_trips = client.execute(sql_future, [search_param, search_param]).rows
+        
+
+        # Check if we found anything
+        no_results = not (past_trips or future_trips)
+        
+        
+
+        return render_template(
+            "pages/admin_trips.jinja",
+            past_trips=past_trips,
+            future_trips=future_trips,
+            search_text=search_text,
+            no_results=no_results
+        )
 
 
        
@@ -604,3 +651,40 @@ def unjoin_trip(trip_id):
 
 
 #-----------------------------------------------------------
+#add photos route
+#-----------------------------------------------------------
+@app.get("/trips/<int:trip_id>/add-photos")
+@admin_required
+def show_add_photo_form(trip_id):
+    with connect_db() as client:
+        result = client.execute("SELECT * FROM trips WHERE id = ?", [trip_id])
+        trip = result[0] if result else None
+    return render_template("components/admin_trip_photo_form.jinja", trips=trip)
+
+
+@app.post("/trips/<int:trip_id>/add-photos")
+@admin_required
+def add_photos(trip_id):
+    file = request.files.get("photo")
+    credits = request.form.get("credits")
+
+    if not file:
+        return "<div style='color:red;'>No file selected</div>"
+
+    image_data = file.read()
+    image_type = file.mimetype
+
+    with connect_db() as client:
+        client.execute(
+            "INSERT INTO trip_photos (trip_id, credits, image_data, image_type) VALUES (?, ?, ?, ?)",
+            [trip_id, credits, image_data, image_type]
+        )
+
+        # fetch updated trip and photos
+        trip_result = client.execute("SELECT * FROM trips WHERE id = ?", [trip_id])
+        trip = trip_result[0] if trip_result else None
+
+        photos = client.execute("SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id])
+
+    return render_template("components/admin_trip_details.jinja", trips=trip, photos=photos)
+

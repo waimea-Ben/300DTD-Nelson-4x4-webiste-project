@@ -307,7 +307,7 @@ def update_trips(trip_id):
                 photos=photos
             )
         else:
-            return not_found_error()
+            return not_found_error() 
 
 #-----------------------------------------------------------
 #trip delete route

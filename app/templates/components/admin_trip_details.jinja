@@ -5,18 +5,6 @@
 <p><strong>Difficulty:</strong> {{ trips.grade }}</p>
 <p>{{ trips.description }}</p>
 
-{# {% if photos %}
-    {% for photo in photos %}
-        <div>
-            <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200"><br>
-            <small>{{ photo.credits }}</small>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>No photos yet.</p>
-{% endif %} #}
-
-
 <button 
     hx-get="/trips/{{ trips.id }}/edit"
     hx-target="#trip-{{ trips.id }}"
@@ -24,11 +12,13 @@
     Edit
 </button>
 
-<a href="/trips/{{ trips.id }}/delete">Delete</a>
+<a role="button" href="/trips/{{ trips.id }}/delete">Delete</a>
 
-<button 
-    hx-get="/trips/{{ trips.id }}/add-photos"
-    hx-target="#trip-{{ trips.id }}"
-    hx-swap="innerHTML">
-    Add photos  
+{% if trips.is_past %}
+    <button 
+        hx-get="/trips/{{ trips.id }}/add-photos"
+        hx-target="#trip-{{ trips.id }}"
+        hx-swap="innerHTML">
+        Add photos  
 </button>
+{% endif %}

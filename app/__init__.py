@@ -42,20 +42,45 @@ init_datetime(app)  # Handle UTC dates in timestamps
 @app.get("/")
 def home_past_trips():
     with connect_db() as client:
-        # Get all the things from the DB
         sql = """
-            SELECT *
-
+            SELECT trips.*,
+                   members.name AS leader_name,
+                   trip_photos.id AS photo_id,
+                   trip_photos.credits,
+                   trip_photos.image_data,
+                   trip_photos.image_type
             FROM trips
+            LEFT JOIN members ON members.id = trips.leader
+            LEFT JOIN trip_photos ON trip_photos.trip_id = trips.id
             WHERE date(trips.date) < date('now')
-            ORDER BY trips.date DESC
+            ORDER BY trips.date DESC;
         """
-        params=[]
-        result = client.execute(sql, params)
-        past_trips = result.rows
+        result = client.execute(sql)
 
-        # And show them on the page
-        return render_template("pages/home.jinja",  past_trips = past_trips)
+        trips_dict = {}
+        for row in result.rows:
+            trip_id = row["id"]
+            if trip_id not in trips_dict:
+                trips_dict[trip_id] = {
+                    "id": row["id"],
+                    "name": row["name"],
+                    "date": row["date"],
+                    "leader_name": row["leader_name"],
+                    "location": row["location"],
+                    "summary": row["summary"],
+                    "photos": []
+                }
+            if row["photo_id"]:  # attach photo if exists
+                trips_dict[trip_id]["photos"].append({
+                    "id": row["photo_id"],
+                    "credits": row["credits"],
+                    "image_data": row["image_data"],
+                    "image_type": row["image_type"],
+                })
+
+        past_trips = list(trips_dict.values())
+
+    return render_template("pages/home.jinja", past_trips=past_trips)
 
 
 #-----------------------------------------------------------
@@ -64,113 +89,47 @@ def home_past_trips():
 @app.get("/past/")
 def past_trips():
     with connect_db() as client:
-        # Get all past trips
         sql = """
-            SELECT trips.*, trip_photos.*
+            SELECT trips.*,
+                   members.name AS leader_name,
+                   trip_photos.id AS photo_id,
+                   trip_photos.credits,
+                   trip_photos.image_data,
+                   trip_photos.image_type
             FROM trips
+            LEFT JOIN members ON members.id = trips.leader
             LEFT JOIN trip_photos ON trip_photos.trip_id = trips.id
             WHERE date(trips.date) < date('now')
             ORDER BY trips.date DESC;
-
         """
         result = client.execute(sql)
-        past_trips = result.rows 
 
+        trips_dict = {}
+        for row in result.rows:
+            trip_id = row["id"]
+            if trip_id not in trips_dict:
+                trips_dict[trip_id] = {
+                    "id": row["id"],
+                    "name": row["name"],
+                    "date": row["date"],
+                    "leader_name": row["leader_name"],
+                    "location": row["location"],
+                    "summary": row["summary"],
+                    "photos": []
+                }
+            if row["photo_id"]:  # has a photo
+                trips_dict[trip_id]["photos"].append({
+                    "id": row["photo_id"],
+                    "credits": row["credits"],
+                    "image_data": row["image_data"],
+                    "image_type": row["image_type"],
+                })
 
+        past_trips = list(trips_dict.values())
 
     return render_template("pages/past.jinja", past_trips=past_trips)
 
 
-# #-----------------------------------------------------------
-# # Things page route - Show all the things, and new thing form
-# #-----------------------------------------------------------
-# @app.get("/things/")
-# def show_all_things():
-#     with connect_db() as client:
-#         # Get all the things from the DB
-#         sql = """
-#             SELECT things.id,
-#                    things.name,
-#                    users.name AS owner
-
-#             FROM things
-#             JOIN users ON things.user_id = users.id
-
-#             ORDER BY things.name ASC
-#         """
-#         params=[]
-#         result = client.execute(sql, params)
-#         things = result.rows
-
-#         # And show them on the page
-#         return render_template("pages/things.jinja", things=things)
-
-
-# #-----------------------------------------------------------
-# # Thing page route - Show details of a single thing
-# #-----------------------------------------------------------
-# @app.get("/thing/<int:id>")
-# def show_one_thing(id):
-#     with connect_db() as client:
-#         # Get the thing details from the DB, including the owner info
-#         sql = """
-#             SELECT things.id,
-#                    things.name,
-#                    things.price,
-#                    things.user_id,
-#                    users.name AS owner
-
-#             FROM things
-#             JOIN users ON things.user_id = users.id
-
-#             WHERE things.id=?
-#         """
-#         params = [id]
-#         result = client.execute(sql, params)
-
-#         # Did we get a result?
-#         if result.rows:
-#             # yes, so show it on the page
-#             thing = result.rows[0]
-#             return render_template("pages/thing.jinja", thing=thing)
-
-#         else:
-#             # No, so show error
-#             return not_found_error()
-
-
-# #-----------------------------------------------------------
-# # Route for adding a thing, using data posted from a form
-# # - Restricted to logged in users
-# #-----------------------------------------------------------
-# @app.post("/add")
-# @login_required
-# def add_a_thing():
-#     # Get the data from the form
-#     name  = request.form.get("name")
-#     price = request.form.get("price")
-
-#     # Sanitise the text inputs
-#     name = html.escape(name)
-
-#     # Get the user id from the session
-#     user_id = session["user_id"]
-
-#     with connect_db() as client:
-#         # Add the thing to the DB
-#         sql = "INSERT INTO things (name, price, user_id) VALUES (?, ?, ?)"
-#         params = [name, price, user_id]
-#         client.execute(sql, params)
-
-#         # Go back to the home page
-#         flash(f"Thing '{name}' added", "success")
-#         return redirect("/things")
-
-
-#-----------------------------------------------------------
-# Route for deleting a thing, Id given in the route
-# - Restricted to logged in users
-#-----------------------------------------------------------
 @app.get("/members/<int:id>/delete")
 @admin_required
 def delete_a_member(id):
@@ -322,6 +281,7 @@ def update_trips(trip_id):
             client.execute(sql_update, params_update)
 
         # ------------------ Fetch trip and members for the form ------------------
+        # fetch trip and members for the form
         sql_trip = """
             SELECT trips.*, members.name AS leader_name
             FROM trips
@@ -333,13 +293,18 @@ def update_trips(trip_id):
         sql_members = "SELECT id, name FROM members ORDER BY name"
         members_result = client.execute(sql_members)
 
+        sql_photos = "SELECT * FROM trip_photos WHERE trip_id = ?"
+        photos_result = client.execute(sql_photos, [trip_id])
+
         if trip_result.rows:
             trip = trip_result.rows[0]
             members = members_result.rows
+            photos = photos_result.rows
             return render_template(
                 "components/admin_trip_details.jinja",
                 trips=trip,
-                members=members
+                members=members,
+                photos=photos
             )
         else:
             return not_found_error()
@@ -465,11 +430,6 @@ def logout():
 #-----------------------------------------------------------
 # admin page route
 #-----------------------------------------------------------
-@app.get("/admin/settings")
-@admin_required
-def admin_settings():
-    return render_template("pages/admin_settings.jinja")
-#-----------------------------------------------------------
 @app.get("/admin/trips")
 @app.get("/admin")
 @admin_required
@@ -480,7 +440,8 @@ def search_admin_trips():
     with connect_db() as client:
         # Past trips
         sql_past = """
-        SELECT trips.*, members.name as leader_name
+        SELECT trips.*, members.name as leader_name,
+        1 as is_past
         FROM trips
         LEFT JOIN members ON trips.leader = members.id
         WHERE (
@@ -494,7 +455,8 @@ def search_admin_trips():
 
         # Future trips
         sql_future = """
-        SELECT trips.*, members.name as leader_name
+        SELECT trips.*, members.name as leader_name,
+        0 as is_past
         FROM trips
         LEFT JOIN members ON trips.leader = members.id
         WHERE (
@@ -509,7 +471,6 @@ def search_admin_trips():
 
         # Check if we found anything
         no_results = not (past_trips or future_trips)
-        
         
 
         return render_template(
@@ -688,3 +649,56 @@ def add_photos(trip_id):
 
     return render_template("components/admin_trip_details.jinja", trips=trip, photos=photos)
 
+#photo delete route
+@app.delete("/trips/<int:trip_id>/photos/<int:photo_id>/delete")
+@admin_required
+def delete_trip_photo(trip_id, photo_id):
+    with connect_db() as client:
+        # Delete the photo
+        client.execute("DELETE FROM trip_photos WHERE id = ?", [photo_id])
+        
+        # Fetch updated trip and photos
+        trip_result = client.execute("SELECT * FROM trips WHERE id = ?", [trip_id])
+        trip = trip_result[0] if trip_result else None
+        photos = client.execute("SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id])
+        
+    return render_template("components/admin_trip_details.jinja", trips=trip, photos=photos)
+
+
+
+#-----------------------------------------------------------
+#settings route
+
+def get_settings():
+    with connect_db() as client:
+        sql = "SELECT * FROM site_settings WHERE id = 1"
+        result = client.execute(sql).rows 
+        settings = result[0]
+    return settings  
+
+
+
+@app.get("/admin/settings")
+def admin_settings():
+    settings = get_settings()
+    return render_template("pages/admin_settings.jinja", settings=settings)
+
+@app.post("/admin/settings")
+def update_settings():
+    site_name = request.form["site_name"]
+    join_price = request.form["join_price"]
+    contact_email = request.form["contact_email"]
+
+    with connect_db() as client:
+        sql = """
+            UPDATE site_settings
+            SET site_name = ?, join_price = ?, contact_email = ?
+            WHERE id = 1
+        """
+        client.execute(sql, [site_name, join_price, contact_email])
+
+    return redirect("/admin/settings")
+
+@app.context_processor
+def inject_settings():
+    return dict(settings=get_settings())

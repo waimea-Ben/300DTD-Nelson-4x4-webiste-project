@@ -17,7 +17,7 @@
 
 {% block content %}
 
-    <h1>Nelson 4wd Club</h1>
+    <h1>{{ settings.site_name }}</h1>
 
     <p>Join us for exciting off-road adventures across the top
  of the South Island. From beginners to experts, 
@@ -25,17 +25,24 @@ everyone is welcome in our friendly
 community of 4WD enthusiasts.</p>
 
 <section id="homeRecent">
-<h2>Recent Adventures</h2>
+    <h2>Recent Adventures</h2>  
+{% for trip in past_trips %}
+    <article>
+        <header>
+            {% if trip.photos %}
+                <img src="data:{{ trip.photos[0].image_type }};base64,{{ trip.photos[0].image_data | b64encode }}" alt="{{ trip.photos[0].credits }}" width="200">
+            {% else %}
+                <img src="/static/images/default_trip.jpg" alt="Default trip image" width="200">
+            {% endif %}
+        </header>
+        <h3>{{ trip.name }}</h3>
+        <p>{{ trip.location }}</p>
+        <p>{{ trip.summary }}</p>
+        <p><strong>Date:</strong> {{ trip.date }}</p>
+    </article>
+{% endfor %}
 
-        {% for trip in past_trips %}
-            <article>
-                <h3>{{ trip.name }}</h3>
-                <p>{{ trip.location }}</p>
-                <p>{{ trip.summary }}</p>
-                <p><strong>Date:</strong> {{ trip.date }}</p>
 
-            </article>
-        {% endfor %}
   
 </section>
 
@@ -78,8 +85,8 @@ community of 4WD enthusiasts.</p>
         <li>Local landowner relationships</li>
     </Article>
 
-    <h2>$65 a year</h2>
-    <a href="mailto:someone@example.com?subject=New%20member.">Contact us</a>
+    <h2>${{ settings.join_price }} a year</h2>
+    <a href="mailto:{{ settings.contact_email }}?subject=New%20member.">Contact us</a>
 
 
 

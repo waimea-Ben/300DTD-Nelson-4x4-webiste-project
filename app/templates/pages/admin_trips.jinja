@@ -28,15 +28,15 @@
         <h2>Trip Management</h2>
         <p>Create, edit, and manage club trips</p>
 
-        {% for member in members %}
-            <p>{{ member.name }}</p>
-        {% endfor %}
+        
     </header>
 
     <form action="/admin/trips" method="get">
         <input type="text" name="q" value="{{ search_text }}" placeholder="Search trips...">
         <button type="submit">Search</button>
     </form>
+    <a role="button" href="/admin/trips/new" class="button">Add New Trip</a>
+        <br>
 
     {% if not no_results %}
         <h3>Upcoming Trips</h3>

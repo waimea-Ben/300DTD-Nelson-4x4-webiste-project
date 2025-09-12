@@ -1,0 +1,70 @@
+{#=====================================================
+  Home page
+  - Hero style greeting banner
+  - List of things passed in as 'things' array
+  - Form for adding a new thing
+=====================================================#}
+
+{% extends 'pages/base.jinja' %}
+
+
+{% block title %}
+
+    Nelson 4x4 Club
+
+{% endblock %}
+
+
+{% block content %}
+
+<form 
+    method="post" 
+    action="/admin/trips/new"
+    id="trip-form"
+>
+    <label>Name:
+    <input type="text" name="name" required>
+    </label>
+
+    <label>Date:
+    <input type="date" name="date" required>
+    </label>
+
+    <label>Location:
+    <input type="text" name="location" required>
+    </label>
+
+    <label>meeting place:
+        <input type="text" name="meeting" required>
+    </label>
+
+    <label for="difficulty">Difficulty:</label>
+    <select id="difficulty" name="difficulty">
+        <option value="Easy">Easy</option>
+        <option value="Moderate">Moderate</option>
+        <option value="Challenging">Challenging</option>
+    </select>
+
+    <label>notes:
+    <textarea name="notes" rows="4" cols="50"></textarea>
+    </label>
+
+    <label for="leader">Leader:</label>
+    <select name="leader" id="leader">
+        {% for member in members %}
+        <option  value="{{ member.id }}">
+            {{ member.name }}
+        </option>
+        {% endfor %}
+    </select>
+
+
+  
+
+<button type="submit">Add</button>
+</form>
+
+
+
+{% endblock %}
+

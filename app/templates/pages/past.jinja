@@ -24,6 +24,16 @@
         <p>{{ trip.location }}</p>
         <p>{{ trip.summary }}</p>
 
+        {% if session.member_id %}
+            <p>attendees</p>
+            <ul>
+                {% for attendee in trip.attendees %}
+                    <li>{{ attendee.name }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+
         {% for photo in trip.photos %}
             <div>
                 <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200">

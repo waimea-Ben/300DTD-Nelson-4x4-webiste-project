@@ -89,45 +89,63 @@ def home_past_trips():
 @app.get("/past/")
 def past_trips():
     with connect_db() as client:
-        sql = """
-            SELECT trips.*,
-                   members.name AS leader_name,
-                   trip_photos.id AS photo_id,
-                   trip_photos.credits,
-                   trip_photos.image_data,
-                   trip_photos.image_type
+        # Step 1: Fetch past trips with leader info
+        trips_sql = """
+            SELECT trips.*, leader.name AS leader_name
             FROM trips
-            LEFT JOIN members ON members.id = trips.leader
-            LEFT JOIN trip_photos ON trip_photos.trip_id = trips.id
+            LEFT JOIN members AS leader ON leader.id = trips.leader
             WHERE date(trips.date) < date('now')
             ORDER BY trips.date DESC;
         """
-        result = client.execute(sql)
+        trips_result = client.execute(trips_sql)
+        trips_dict = {
+            row["id"]: {
+                "id": row["id"],
+                "name": row["name"],
+                "date": row["date"],
+                "leader_name": row["leader_name"],
+                "location": row["location"],
+                "summary": row["summary"],
+                "photos": [],
+                "attendees": []
+            }
+            for row in trips_result.rows
+        }
 
-        trips_dict = {}
-        for row in result.rows:
-            trip_id = row["id"]
-            if trip_id not in trips_dict:
-                trips_dict[trip_id] = {
+        trip_ids = list(trips_dict.keys())
+
+        # Step 2: Fetch photos for those trips
+        if trip_ids:
+            photos_sql = f"""
+                SELECT * FROM trip_photos
+                WHERE trip_id IN ({','.join(['?'] * len(trip_ids))});
+            """
+            photos_result = client.execute(photos_sql, trip_ids)
+            for row in photos_result.rows:
+                trips_dict[row["trip_id"]]["photos"].append({
                     "id": row["id"],
-                    "name": row["name"],
-                    "date": row["date"],
-                    "leader_name": row["leader_name"],
-                    "location": row["location"],
-                    "summary": row["summary"],
-                    "photos": []
-                }
-            if row["photo_id"]:  # has a photo
-                trips_dict[trip_id]["photos"].append({
-                    "id": row["photo_id"],
                     "credits": row["credits"],
                     "image_data": row["image_data"],
                     "image_type": row["image_type"],
                 })
 
-        past_trips = list(trips_dict.values())
+        # Step 3: Fetch attendees for those trips
+        if trip_ids:
+            attendees_sql = f"""
+                SELECT coming.trip_id, members.id AS attendee_id, members.name AS attendee_name
+                FROM coming
+                JOIN members ON members.id = coming.user_id
+                WHERE coming.trip_id IN ({','.join(['?'] * len(trip_ids))});
+            """
+            attendees_result = client.execute(attendees_sql, trip_ids)
+            for row in attendees_result.rows:
+                attendee = {"id": row["attendee_id"], "name": row["attendee_name"]}
+                if attendee not in trips_dict[row["trip_id"]]["attendees"]:
+                    trips_dict[row["trip_id"]]["attendees"].append(attendee)
 
-    return render_template("pages/past.jinja", past_trips=past_trips)
+    return render_template("pages/past.jinja", past_trips=list(trips_dict.values()))
+
+
 
 
 @app.get("/members/<int:id>/delete")
@@ -241,11 +259,14 @@ def edit_trip(trip_id):
         sql_members = "SELECT id, name FROM members ORDER BY name"
         members_result = client.execute(sql_members)
 
+        sql_photos = "SELECT * FROM trip_photos WHERE trip_id = ?"
+        photos_result = client.execute(sql_photos, [trip_id])
+
         # Did we get a result?
         if result.rows:
             # yes, so show it on the page
             trips = result.rows[0]
-            return render_template("components/admin_trip_form.jinja", trips=trips, members=members_result)
+            return render_template("components/admin_trip_form.jinja", trips=trips, members=members_result, photos=photos_result)
 
         else:
             # No, so show error
@@ -283,10 +304,13 @@ def update_trips(trip_id):
         # ------------------ Fetch trip and members for the form ------------------
         # fetch trip and members for the form
         sql_trip = """
-            SELECT trips.*, members.name AS leader_name
+            SELECT trips.*, 
+                members.name AS leader_name,
+                CASE WHEN date(trips.date) < date('now') THEN 1 ELSE 0 END AS is_past
             FROM trips
             LEFT JOIN members ON trips.leader = members.id
             WHERE trips.id = ?
+
         """
         trip_result = client.execute(sql_trip, [trip_id])
 
@@ -300,6 +324,7 @@ def update_trips(trip_id):
             trip = trip_result.rows[0]
             members = members_result.rows
             photos = photos_result.rows
+            
             return render_template(
                 "components/admin_trip_details.jinja",
                 trips=trip,
@@ -642,12 +667,18 @@ def add_photos(trip_id):
         )
 
         # fetch updated trip and photos
-        trip_result = client.execute("SELECT * FROM trips WHERE id = ?", [trip_id])
-        trip = trip_result[0] if trip_result else None
+        trip_result = client.execute("""
+                SELECT trips.*, 
+                    CASE WHEN date(trips.date) < date('now') THEN 1 ELSE 0 END AS is_past
+                FROM trips
+                WHERE id = ?
+                """, [trip_id])
+        trips = trip_result.rows[0] if trip_result.rows else None
+
 
         photos = client.execute("SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id])
 
-    return render_template("components/admin_trip_details.jinja", trips=trip, photos=photos)
+    return render_template("components/admin_trip_details.jinja", trips=trips, photos=photos)
 
 #photo delete route
 @app.delete("/trips/<int:trip_id>/photos/<int:photo_id>/delete")
@@ -656,13 +687,21 @@ def delete_trip_photo(trip_id, photo_id):
     with connect_db() as client:
         # Delete the photo
         client.execute("DELETE FROM trip_photos WHERE id = ?", [photo_id])
-        
-        # Fetch updated trip and photos
+
+        # Fetch updated trip info
         trip_result = client.execute("SELECT * FROM trips WHERE id = ?", [trip_id])
-        trip = trip_result[0] if trip_result else None
-        photos = client.execute("SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id])
-        
-    return render_template("components/admin_trip_details.jinja", trips=trip, photos=photos)
+        trips = trip_result.rows[0] if trip_result.rows else None
+
+        # Fetch updated photos
+        photos_result = client.execute("SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id])
+        photos = photos_result.rows
+
+    return render_template(
+        "components/admin_trip_form.jinja",
+        trips=trips,
+        photos=photos,
+        trip_id=trip_id
+    )
 
 
 
@@ -702,3 +741,37 @@ def update_settings():
 @app.context_processor
 def inject_settings():
     return dict(settings=get_settings())
+
+
+#-----------------------------------------------------------
+#trip creation routes
+#-----------------------------------------------------------
+@app.get("/admin/trips/new")
+@admin_required
+def new_trip_form():
+    with connect_db() as client:
+        members = client.execute("SELECT id, name FROM members").rows
+
+    return render_template("pages/admin_trips_new.jinja", members=members)
+
+@app.post("/admin/trips/new")
+@admin_required
+def create_new_trip():
+    name = request.form["name"]
+    date = request.form["date"]
+    location = request.form["location"]
+    meeting = request.form["meeting"]
+    difficulty = request.form["difficulty"]
+    notes = request.form.get("notes", "")
+    leader = request.form["leader"]
+
+    with connect_db() as client:
+        client.execute(
+            """
+            INSERT INTO trips (name, date, location, meeting, grade, notes, leader)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            [name, date, location, meeting, difficulty, notes, leader]
+        )
+
+    return redirect("/admin/trips")

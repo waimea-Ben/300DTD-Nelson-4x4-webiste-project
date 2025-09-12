@@ -42,23 +42,24 @@
 </label>
 
 <label>Photos:</label>
-  <div class="trip-photos">
-    {% if photos %}
-      {% for photo in photos %}
-        <img 
-          src="data:{{ photo.image_type }};base64,{{ photo.image_data|b64encode }}"
-          alt="Trip Photo"
-          style="width:100px; cursor:pointer; margin:5px;"
-          title="Click to delete"
-          hx-delete="/trips/{{ trips.id }}/photos/{{ photo.id }}/delete"
-          hx-target="#trip-{{ trips.id }}"
-          hx-swap="innerHTML"
-        >
-      {% endfor %}
-    {% else %}
-      <p>No photos yet.</p>
-    {% endif %}
-  </div>
+<div class="trip-photos">
+  {% if photos %}
+    {% for photo in photos %}
+      <img 
+        src="data:{{ photo.image_type }};base64,{{ photo.image_data|b64encode }}"
+        alt="Trip Photo"
+        style="width:100px; cursor:pointer; margin:5px;"
+        title="Click to delete"
+        hx-delete="/trips/{{ trips.id }}/photos/{{ photo.id }}/delete"
+        hx-target="#trip-{{ trips.id }}"
+        hx-swap="innerHTML"
+      >
+    {% endfor %}
+  {% else %}
+    <p>No photos yet.</p>
+  {% endif %}
+</div>
 
-  <button type="submit">Save</button>
+<button type="submit">Save</button>
 </form>
+

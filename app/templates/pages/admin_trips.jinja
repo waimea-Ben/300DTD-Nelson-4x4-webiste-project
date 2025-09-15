@@ -39,27 +39,32 @@ Admin
     <br>
 
     {% if not no_results %}
-    <h3>Upcoming Trips</h3>
-    {% if future_trips %}
-    {% for trips in future_trips %}
-    <article id="trip-{{ trips.id }}">
-        {% include 'components/admin_trip_details.jinja' %}
-    </article>
-    {% endfor %}
-    {% else %}
-    <p>No upcoming trips found matching "{{ search_text }}"</p>
-    {% endif %}
+        <h3>Upcoming Trips</h3>
+        {% if future_trips %}
 
-    <h3>Past Trips</h3>
-    {% if past_trips %}
-    {% for trips in past_trips %}
-    <article id="trip-{{ trips.id }}">
-        {% include 'components/admin_trip_details.jinja' %}
-    </article>
-    {% endfor %}
-    {% else %}
-    <p>No past trips found matching "{{ search_text }}"</p>
-    {% endif %}
+            {% for trips in future_trips %}
+            <article id="trip-{{ trips.id }}">
+                {% include 'components/admin_trip_details.jinja' %}
+            </article>
+            {% endfor %}
+
+            {% else %}
+            <p>No upcoming trips found matching "{{ search_text }}"</p>
+            {% endif %}
+
+        <h3>Past Trips</h3>
+
+        {% if past_trips %}
+            {% for trips in past_trips %}
+            <article id="trip-{{ trips.id }}">
+                {% include 'components/admin_trip_details.jinja' %}
+            </article>
+            {% endfor %}
+
+            {% else %}
+            <p>No past trips found matching "{{ search_text }}"</p>
+            {% endif %}
+
     {% else %}
     <p>No trips found matching "{{ search_text }}".</p>
     {% endif %}

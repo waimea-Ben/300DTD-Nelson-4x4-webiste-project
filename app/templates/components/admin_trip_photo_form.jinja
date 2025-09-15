@@ -1,14 +1,26 @@
-<form 
-    hx-post="/trips/{{ trips.id }}/add-photos"
-    hx-target="#trip-{{ trips.id }}"
-    hx-swap="innerHTML"
-    enctype="multipart/form-data"
->
-    <label for="photo">Photo:</label>
-    <input type="file" name="photo" accept="image/*" required><br><br>
+<div style="position: relative;">
+    <button 
+        style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 1.2em; cursor: pointer;"
+        hx-get="/trips/{{ trips.id }}/details"
+        hx-target="#trip-{{ trips.id }}"
+        hx-swap="innerHTML"
+        aria-label="Close"
+    >
+        ❌
+    </button>
 
-    <label for="credits">Credits:</label>
-    <input type="text" name="credits" placeholder="Photo by..." required><br><br>
+    <form 
+        hx-post="/trips/{{ trips.id }}/add-photos"
+        hx-target="#trip-{{ trips.id }}"
+        hx-swap="innerHTML"
+        enctype="multipart/form-data"
+    >
+        <label for="photo">Photo:</label>
+        <input type="file" name="photo" accept="image/*" required><br><br>
 
-    <button type="submit">Upload Photo</button>
-</form>
+        <label for="credits">Credits:</label>
+        <input type="text" name="credits" placeholder="Photo by..." required><br><br>
+
+        <button type="submit">Upload Photo</button>
+    </form>
+</div>

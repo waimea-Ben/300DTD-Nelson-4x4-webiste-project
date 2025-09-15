@@ -35,6 +35,9 @@
         <button type="submit">Search</button>
     </form>
 
+    <a role="button" href="/admin/members/new" class="button">Add New Member</a>
+    <br>
+
     {% if members %}
         {% for member in members %}
             <article id="member-{{ member.id }}">

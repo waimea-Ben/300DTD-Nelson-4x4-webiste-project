@@ -1,10 +1,9 @@
-
 {% extends 'pages/base.jinja' %}
 
 
 {% block title %}
 
-    Past trips
+Past trips
 
 {% endblock %}
 
@@ -13,36 +12,35 @@
 
 <h1>Past Trips</h1>
 
-    {% for trip in past_trips %}
-    <article>
-        <header>
-            <h2>{{ trip.name }}</h2>
-            <p>{{ trip.date }}</p>
-            <p>Led by {{ trip.leader_name }}</p>
-        </header>
+{% for trip in past_trips %}
+<article>
+    <header>
+        <h2>{{ trip.name }}</h2>
+        <p>{{ trip.date }}</p>
+        <p>Led by {{ trip.leader_name }}</p>
+    </header>
 
-        <p>{{ trip.location }}</p>
-        <p>{{ trip.summary }}</p>
+    <p>{{ trip.location }}</p>
+    <p>{{ trip.summary }}</p>
 
-        {% if session.member_id %}
-            <p>attendees</p>
-            <ul>
-                {% for attendee in trip.attendees %}
-                    <li>{{ attendee.name }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-
-        {% for photo in trip.photos %}
-            <div>
-                <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200">
-                <small>{{ photo.credits }}</small>
-            </div>
+    {% if session.member_id %}
+    <p>attendees</p>
+    <ul>
+        {% for attendee in trip.attendees %}
+        <li>{{ attendee.name }}</li>
         {% endfor %}
-    </article>
+    </ul>
+    {% endif %}
+
+
+    {% for photo in trip.photos %}
+    <div>
+        <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200">
+        <small>{{ photo.credits }}</small>
+    </div>
     {% endfor %}
+</article>
+{% endfor %}
 
 
 {% endblock %}
-

@@ -1,9 +1,9 @@
-#===========================================================
-# YOUR PROJECT TITLE HERE
-# YOUR NAME HERE
-#-----------------------------------------------------------
+# ===========================================================
+# Nelson 4x4 Club Website
+# Ben Martin
+# -----------------------------------------------------------
 # BRIEF DESCRIPTION OF YOUR PROJECT HERE
-#===========================================================
+# ===========================================================
 
 
 from flask import Flask, render_template, request, flash, redirect, session
@@ -12,33 +12,34 @@ import html
 import base64
 
 from app.helpers.session import init_session
-from app.helpers.db      import connect_db
-from app.helpers.errors  import init_error, not_found_error
+from app.helpers.db import connect_db
+from app.helpers.errors import init_error, not_found_error
 from app.helpers.logging import init_logging
-from app.helpers.auth    import login_required, admin_required
-from app.helpers.time    import init_datetime, utc_timestamp, utc_timestamp_now
+from app.helpers.auth import login_required, admin_required
+from app.helpers.time import init_datetime, utc_timestamp, utc_timestamp_now
 from datetime import *
 
 # Create the app
 app = Flask(__name__)
 
-@app.template_filter('b64encode')
+
+@app.template_filter("b64encode")
 def b64encode_filter(data):
     if data is None:
         return ""
     return base64.b64encode(data).decode()
 
+
 # Configure app
-init_session(app)   # Setup a session for messages, etc.
-init_logging(app)   # Log requests
-init_error(app)     # Handle errors and exceptions
+init_session(app)  # Setup a session for messages, etc.
+init_logging(app)  # Log requests
+init_error(app)  # Handle errors and exceptions
 init_datetime(app)  # Handle UTC dates in timestamps
 
 
-
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 # Home page route
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 @app.get("/")
 def home_past_trips():
     with connect_db() as client:
@@ -68,24 +69,26 @@ def home_past_trips():
                     "leader_name": row["leader_name"],
                     "location": row["location"],
                     "summary": row["summary"],
-                    "photos": []
+                    "photos": [],
                 }
             if row["photo_id"]:  # attach photo if exists
-                trips_dict[trip_id]["photos"].append({
-                    "id": row["photo_id"],
-                    "credits": row["credits"],
-                    "image_data": row["image_data"],
-                    "image_type": row["image_type"],
-                })
+                trips_dict[trip_id]["photos"].append(
+                    {
+                        "id": row["photo_id"],
+                        "credits": row["credits"],
+                        "image_data": row["image_data"],
+                        "image_type": row["image_type"],
+                    }
+                )
 
         past_trips = list(trips_dict.values())
 
     return render_template("pages/home.jinja", past_trips=past_trips)
 
 
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 # Past trips page route
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 @app.get("/past/")
 def past_trips():
     with connect_db() as client:
@@ -107,7 +110,7 @@ def past_trips():
                 "location": row["location"],
                 "summary": row["summary"],
                 "photos": [],
-                "attendees": []
+                "attendees": [],
             }
             for row in trips_result.rows
         }
@@ -122,12 +125,14 @@ def past_trips():
             """
             photos_result = client.execute(photos_sql, trip_ids)
             for row in photos_result.rows:
-                trips_dict[row["trip_id"]]["photos"].append({
-                    "id": row["id"],
-                    "credits": row["credits"],
-                    "image_data": row["image_data"],
-                    "image_type": row["image_type"],
-                })
+                trips_dict[row["trip_id"]]["photos"].append(
+                    {
+                        "id": row["id"],
+                        "credits": row["credits"],
+                        "image_data": row["image_data"],
+                        "image_type": row["image_type"],
+                    }
+                )
 
         # Step 3: Fetch attendees for those trips
         if trip_ids:
@@ -146,8 +151,6 @@ def past_trips():
     return render_template("pages/past.jinja", past_trips=list(trips_dict.values()))
 
 
-
-
 @app.get("/members/<int:id>/delete")
 @admin_required
 def delete_a_member(id):
@@ -163,8 +166,9 @@ def delete_a_member(id):
         return redirect("/admin/members")
 
 
-#-----------------------------------------------------------
-    
+# -----------------------------------------------------------
+
+
 @app.get("/members/<int:member_id>/edit")
 @admin_required
 def edit_member(member_id):
@@ -185,8 +189,9 @@ def edit_member(member_id):
             return not_found_error()
 
 
-#-----------------------------------------------------------
-    
+# -----------------------------------------------------------
+
+
 @app.put("/members/<int:member_id>/edit")
 @admin_required
 def update_member(member_id):
@@ -224,15 +229,7 @@ def update_member(member_id):
                 admin = ?
             WHERE id = ?
         """
-        params_update = [
-            name,
-            password_hash,
-            email,
-            number,
-            vehicle,
-            admin,
-            member_id
-        ]
+        params_update = [name, password_hash, email, number, vehicle, admin, member_id]
         client.execute(sql_update, params_update)
 
         # Fetch the updated member
@@ -241,11 +238,14 @@ def update_member(member_id):
 
         if result.rows:
             updated_member = result.rows[0]
-            return render_template("components/member_details.jinja", member=updated_member)
+            return render_template(
+                "components/member_details.jinja", member=updated_member
+            )
         else:
             return not_found_error()
 
-#-----------------------------------------------------------
+
+# -----------------------------------------------------------
 # TRIP EDIT ROUTES
 @app.get("/trips/<int:trip_id>/edit")
 @admin_required
@@ -266,11 +266,16 @@ def edit_trip(trip_id):
         if result.rows:
             # yes, so show it on the page
             trips = result.rows[0]
-            return render_template("components/admin_trip_form.jinja", trips=trips, members=members_result, photos=photos_result)
+            return render_template(
+                "components/admin_trip_form.jinja",
+                trips=trips,
+                members=members_result,
+                photos=photos_result,
+            )
 
         else:
             # No, so show error
-            return not_found_error()       
+            return not_found_error()
 
 
 @app.put("/trips/<int:trip_id>/edit")
@@ -324,19 +329,21 @@ def update_trips(trip_id):
             trip = trip_result.rows[0]
             members = members_result.rows
             photos = photos_result.rows
-            
+
             return render_template(
                 "components/admin_trip_details.jinja",
                 trips=trip,
                 members=members,
-                photos=photos
+                photos=photos,
             )
         else:
-            return not_found_error() 
+            return not_found_error()
 
-#-----------------------------------------------------------
-#trip delete route
-        
+
+# -----------------------------------------------------------
+# trip delete route
+
+
 @app.get("/trips/<int:trip_id>/delete")
 @admin_required
 def delete_a_trip(trip_id):
@@ -351,18 +358,17 @@ def delete_a_trip(trip_id):
         return redirect("/admin/trips")
 
 
-
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 # User login form route
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 @app.get("/login")
 def login_form():
     return render_template("pages/login.jinja")
 
 
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 # Route for adding a user when registration form submitted
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 @app.post("/add-user")
 @admin_required
 def add_user():
@@ -399,9 +405,10 @@ def add_user():
         return redirect("/register")
 
 
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 # Route for processing a user login
-#-----------------------------------------------------------
+# -----------------------------------------------------------
+
 
 @app.post("/login-user")
 def login_member():
@@ -422,11 +429,10 @@ def login_member():
             # Check the password against the stored hash
             if check_password_hash(stored_hash, password):
                 # Save info in the session
-                session["member_id"]   = member["id"]
+                session["member_id"] = member["id"]
                 session["member_name"] = member["name"]
-                session["logged_in"]   = True
+                session["logged_in"] = True
                 session["is_admin"] = int(member["admin"]) == 1
-
 
                 flash("Login successful", "success")
                 return redirect("/")
@@ -436,10 +442,9 @@ def login_member():
         return redirect("/login")
 
 
-
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 # Route for processing a user logout
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 @app.get("/logout")
 def logout():
     # Clear the details from the session
@@ -452,9 +457,10 @@ def logout():
     flash("Logged out successfully", "success")
     return redirect("/")
 
-#-----------------------------------------------------------
+
+# -----------------------------------------------------------
 # admin page route
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 @app.get("/admin/trips")
 @app.get("/admin")
 @admin_required
@@ -492,23 +498,20 @@ def search_admin_trips():
         ORDER BY trips.date ASC
         """
         future_trips = client.execute(sql_future, [search_param, search_param]).rows
-        
 
         # Check if we found anything
         no_results = not (past_trips or future_trips)
-        
 
         return render_template(
             "pages/admin_trips.jinja",
             past_trips=past_trips,
             future_trips=future_trips,
             search_text=search_text,
-            no_results=no_results
+            no_results=no_results,
         )
 
 
-       
-#-----------------------------------------------------------
+# -----------------------------------------------------------
 @app.get("/admin/members")
 @admin_required
 def admin_members():
@@ -530,13 +533,21 @@ def admin_members():
 
         if result.rows:
             members = result.rows
-            return render_template("pages/admin_members.jinja", members=members, search_text=search_text, no_results=False)
+            return render_template(
+                "pages/admin_members.jinja",
+                members=members,
+                search_text=search_text,
+                no_results=False,
+            )
         else:
             # No results found — pass a flag to template or return a custom message
-            return render_template("pages/admin_members.jinja", members=[], search_text=search_text, no_results=True)
+            return render_template(
+                "pages/admin_members.jinja",
+                members=[],
+                search_text=search_text,
+                no_results=True,
+            )
 
-
-       
 
 # #-----------------------------------------------------------
 @app.get("/upcoming/")
@@ -566,13 +577,12 @@ def upcoming_trips():
     return render_template(
         "pages/upcoming.jinja",
         upcoming_trips=upcoming_trips,
-        joined_trip_ids=joined_trip_ids
+        joined_trip_ids=joined_trip_ids,
     )
 
 
-
-#-----------------------------------------------------------
-#join trip route
+# -----------------------------------------------------------
+# join trip route
 @app.get("/trip/<int:trip_id>")
 @login_required
 def get_trip_details(trip_id):
@@ -587,7 +597,6 @@ def get_trip_details(trip_id):
         trip_result = client.execute(sql, [trip_id])
         trip = trip_result.rows[0] if trip_result.rows else None
 
-
         # Get attendees
         sql = """
         SELECT members.name, members.vehicle
@@ -600,28 +609,32 @@ def get_trip_details(trip_id):
         attendees = attendees_result.rows if attendees_result.rows else []
 
     return render_template(
-        "components/trip_details.jinja",
-        trip=trip,
-        attendees=attendees
+        "components/trip_details.jinja", trip=trip, attendees=attendees
     )
 
 
-#-----------------------------------------------------------
-#join trip route
+# -----------------------------------------------------------
+# join trip route
 @app.post("/join-trip/<int:trip_id>")
 @login_required
 def join_trip(trip_id):
     member_id = session["member_id"]
     with connect_db() as client:
         # Avoid duplicate joins
-        check = client.execute("SELECT * FROM coming WHERE user_id=? AND trip_id=?", [member_id, trip_id])
+        check = client.execute(
+            "SELECT * FROM coming WHERE user_id=? AND trip_id=?", [member_id, trip_id]
+        )
         if not check.rows:
-            client.execute("INSERT INTO coming (user_id, trip_id) VALUES (?, ?)", [member_id, trip_id])
+            client.execute(
+                "INSERT INTO coming (user_id, trip_id) VALUES (?, ?)",
+                [member_id, trip_id],
+            )
     flash("You joined the trip!", "success")
     return redirect("/upcoming/")
 
-#-----------------------------------------------------------
-#leave trip route
+
+# -----------------------------------------------------------
+# leave trip route
 @app.post("/unjoin-trip/<int:trip_id>")
 @login_required
 def unjoin_trip(trip_id):
@@ -629,16 +642,15 @@ def unjoin_trip(trip_id):
     with connect_db() as client:
         # Remove the user from the coming table
         client.execute(
-            "DELETE FROM coming WHERE user_id = ? AND trip_id = ?",
-            [member_id, trip_id]
+            "DELETE FROM coming WHERE user_id = ? AND trip_id = ?", [member_id, trip_id]
         )
     flash("You left the trip.", "info")
     return redirect("/upcoming/")
 
 
-#-----------------------------------------------------------
-#add photos route
-#-----------------------------------------------------------
+# -----------------------------------------------------------
+# add photos route
+# -----------------------------------------------------------
 @app.get("/trips/<int:trip_id>/add-photos")
 @admin_required
 def show_add_photo_form(trip_id):
@@ -663,24 +675,31 @@ def add_photos(trip_id):
     with connect_db() as client:
         client.execute(
             "INSERT INTO trip_photos (trip_id, credits, image_data, image_type) VALUES (?, ?, ?, ?)",
-            [trip_id, credits, image_data, image_type]
+            [trip_id, credits, image_data, image_type],
         )
 
         # fetch updated trip and photos
-        trip_result = client.execute("""
+        trip_result = client.execute(
+            """
                 SELECT trips.*, 
                     CASE WHEN date(trips.date) < date('now') THEN 1 ELSE 0 END AS is_past
                 FROM trips
                 WHERE id = ?
-                """, [trip_id])
+                """,
+            [trip_id],
+        )
         trips = trip_result.rows[0] if trip_result.rows else None
 
+        photos = client.execute(
+            "SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id]
+        )
 
-        photos = client.execute("SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id])
+    return render_template(
+        "components/admin_trip_details.jinja", trips=trips, photos=photos
+    )
 
-    return render_template("components/admin_trip_details.jinja", trips=trips, photos=photos)
 
-#photo delete route
+# photo delete route
 @app.delete("/trips/<int:trip_id>/photos/<int:photo_id>/delete")
 @admin_required
 def delete_trip_photo(trip_id, photo_id):
@@ -693,34 +712,33 @@ def delete_trip_photo(trip_id, photo_id):
         trips = trip_result.rows[0] if trip_result.rows else None
 
         # Fetch updated photos
-        photos_result = client.execute("SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id])
+        photos_result = client.execute(
+            "SELECT * FROM trip_photos WHERE trip_id = ?", [trip_id]
+        )
         photos = photos_result.rows
 
     return render_template(
-        "components/admin_trip_form.jinja",
-        trips=trips,
-        photos=photos,
-        trip_id=trip_id
+        "components/admin_trip_form.jinja", trips=trips, photos=photos, trip_id=trip_id
     )
 
 
+# -----------------------------------------------------------
+# settings route
 
-#-----------------------------------------------------------
-#settings route
 
 def get_settings():
     with connect_db() as client:
         sql = "SELECT * FROM site_settings WHERE id = 1"
-        result = client.execute(sql).rows 
+        result = client.execute(sql).rows
         settings = result[0]
-    return settings  
-
+    return settings
 
 
 @app.get("/admin/settings")
 def admin_settings():
     settings = get_settings()
     return render_template("pages/admin_settings.jinja", settings=settings)
+
 
 @app.post("/admin/settings")
 def update_settings():
@@ -738,14 +756,15 @@ def update_settings():
 
     return redirect("/admin/settings")
 
+
 @app.context_processor
 def inject_settings():
     return dict(settings=get_settings())
 
 
-#-----------------------------------------------------------
-#trip creation routes
-#-----------------------------------------------------------
+# -----------------------------------------------------------
+# trip creation routes
+# -----------------------------------------------------------
 @app.get("/admin/trips/new")
 @admin_required
 def new_trip_form():
@@ -753,6 +772,7 @@ def new_trip_form():
         members = client.execute("SELECT id, name FROM members").rows
 
     return render_template("pages/admin_trips_new.jinja", members=members)
+
 
 @app.post("/admin/trips/new")
 @admin_required
@@ -771,7 +791,40 @@ def create_new_trip():
             INSERT INTO trips (name, date, location, meeting, grade, notes, leader)
             VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            [name, date, location, meeting, difficulty, notes, leader]
+            [name, date, location, meeting, difficulty, notes, leader],
         )
 
     return redirect("/admin/trips")
+
+
+# -----------------------------------------------------------
+# new member creation routes
+# -----------------------------------------------------------
+@app.get("/admin/members/new")
+@admin_required
+def new_member_form():
+    return render_template("pages/admin_members_new.jinja")
+
+
+@app.post("/admin/members/new")
+@admin_required
+def Add_new_member():
+    name = request.form["name"]
+    password = request.form["password"]
+    email = request.form["email"]
+    phone = request.form.get("number", "")
+    vehicle = request.form["vehicle"]
+    admin = 1 if request.form.get("admin") == "on" else 0
+
+    hashed_password = generate_password_hash(password)
+
+    with connect_db() as client:
+        client.execute(
+            """
+            INSERT INTO members (name, password_hash, email, number, vehicle, admin)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            [name, hashed_password, email, phone, vehicle, admin],
+        )
+
+    return redirect("/admin/members")

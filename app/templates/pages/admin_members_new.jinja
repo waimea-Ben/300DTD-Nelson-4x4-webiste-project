@@ -1,0 +1,48 @@
+{% extends 'pages/base.jinja' %}
+
+
+{% block title %}
+
+    Nelson 4x4 Club
+
+{% endblock %}
+
+
+{% block content %}
+
+<form 
+    method="post" 
+    action="/admin/members/new"
+    id="member-form"
+>
+    <label>Name:
+    <input type="text" name="name" required>
+    </label>
+
+    <label>Password:
+    <input type="password" name="password" required>
+    </label>
+
+    <label>Email:
+    <input type="email" name="email" required>
+    </label>
+
+    <label>Phone Number:
+        <input type="text" name="number">
+    </label>
+
+    <label>Vehicle:
+        <input type="text" name="vehicle" required>
+    </label>
+
+    <label>Admin:
+        <input type="checkbox" name="admin">
+    </label>
+
+    <button type="submit">Add</button>
+</form>
+
+
+
+{% endblock %}
+

@@ -1,8 +1,4 @@
-<form 
-    hx-put="/members/{{ member.id }}/edit"
-    hx-target="#member-{{ member.id }}"
-    hx-swap="innerHTML"
->
+<form hx-put="/members/{{ member.id }}/edit" hx-target="#member-{{ member.id }}" hx-swap="innerHTML">
   <label>Name:</label>
   <input type="text" name="name" value="{{ member.name }}" required><br>
 

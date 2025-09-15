@@ -1,8 +1,8 @@
 {#=====================================================
-  Home page
-  - Hero style greeting banner
-  - List of things passed in as 'things' array
-  - Form for adding a new thing
+Home page
+- Hero style greeting banner
+- List of things passed in as 'things' array
+- Form for adding a new thing
 =====================================================#}
 
 {% extends 'pages/base.jinja' %}
@@ -10,29 +10,30 @@
 
 {% block title %}
 
-    Nelson 4x4 Club
+Nelson 4x4 Club
 
 {% endblock %}
 
 
 {% block content %}
 
-    <h1>{{ settings.site_name }}</h1>
+<h1>{{ settings.site_name }}</h1>
 
-    <p>Join us for exciting off-road adventures across the top
- of the South Island. From beginners to experts, 
-everyone is welcome in our friendly 
-community of 4WD enthusiasts.</p>
+<p>Join us for exciting off-road adventures across the top
+    of the South Island. From beginners to experts,
+    everyone is welcome in our friendly
+    community of 4WD enthusiasts.</p>
 
 <section id="homeRecent">
-    <h2>Recent Adventures</h2>  
-{% for trip in past_trips %}
+    <h2>Recent Adventures</h2>
+    {% for trip in past_trips %}
     <article>
         <header>
             {% if trip.photos %}
-                <img src="data:{{ trip.photos[0].image_type }};base64,{{ trip.photos[0].image_data | b64encode }}" alt="{{ trip.photos[0].credits }}" width="200">
+            <img src="data:{{ trip.photos[0].image_type }};base64,{{ trip.photos[0].image_data | b64encode }}"
+                alt="{{ trip.photos[0].credits }}" width="200">
             {% else %}
-                <img src="/static/images/default_trip.jpg" alt="Default trip image" width="200">
+            <img src="/static/images/default_trip.jpg" alt="Default trip image" width="200">
             {% endif %}
         </header>
         <h3>{{ trip.name }}</h3>
@@ -40,49 +41,58 @@ community of 4WD enthusiasts.</p>
         <p>{{ trip.summary }}</p>
         <p><strong>Date:</strong> {{ trip.date }}</p>
     </article>
-{% endfor %}
+    {% endfor %}
 
 
-  
+
 </section>
 
 <section id="Join_the_club">
-<h2>Join the Club</h2>
+    <h2>Join the Club</h2>
 
-    <p>Become a member of the Nelson 4wd Club and enjoy exclusive benefits, including access to our trips, events, and community resources.</p>
+    <p>Become a member of the Nelson 4wd Club and enjoy exclusive benefits, including access to our trips, events, and
+        community resources.</p>
 
     <Article id="features">
         <h3>community</h3>
 
-        <li>Friendly welcoming members</li>
-        <li>Social events</li>
-        <li>Knowledge and tips</li>
+        <ul>
+            <li>Friendly welcoming members</li>
+            <li>Social events</li>
+            <li>Knowledge and tips</li>
+        </ul>
     </Article>
 
     <Article id="features">
         <h3>Vehicle support</h3>
 
-        <li>Member discounts</li>
-        <li>Recovery assistance</li>
-        <li>Vehicle modification advice</li>
-        <li>Technical workshops</li>
+        <ul>
+            <li>Member discounts</li>
+            <li>Recovery assistance</li>
+            <li>Vehicle modification advice</li>
+            <li>Technical workshops</li>
+        </ul>
     </Article>
 
     <Article id="features">
         <h3>Regular trips</h3>
 
-        <li>Monthly organized adventures</li>
-        <li>Beginner to advanced 
-      difficulty levels</li>
-        <li>Experienced trip leaders</li>
+        <ul>
+            <li>Monthly organized adventures</li>
+            <li>Beginner to advanced
+                difficulty levels</li>
+            <li>Experienced trip leaders</li>
+        </ul>
     </Article>
 
     <Article id="features">
         <h3>Exclusive access</h3>
 
-        <li>Private land permissions</li>
-        <li>Remote track locations</li>
-        <li>Local landowner relationships</li>
+        <ul>
+            <li>Private land permissions</li>
+            <li>Remote track locations</li>
+            <li>Local landowner relationships</li>
+        </ul>
     </Article>
 
     <h2>${{ settings.join_price }} a year</h2>
@@ -90,5 +100,4 @@ community of 4WD enthusiasts.</p>
 
 
 
-{% endblock %}
-
+    {% endblock %}

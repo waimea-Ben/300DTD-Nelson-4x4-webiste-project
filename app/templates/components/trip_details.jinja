@@ -1,13 +1,12 @@
 <div id="trip-info">
     <div style="text-align:right;">
-        <a href="#"
-        onclick="document.getElementById('overlay').style.display='none'; return false;">X</a>
+        <a href="#" onclick="document.getElementById('overlay').style.display='none'; return false;">X</a>
     </div>
 
     <h1>{{trip.name}}</h1>
     <p>{{trip.location}} {{trip.date}}</p>
 
-    
+
 
     <article>
         <h2>Trip Overview</h2>
@@ -19,12 +18,12 @@
 
     <article>
         <h2>Participants</h2>
-            {% for a in attendees %}
-            <article>
-                <h4>{{a.name}}</h4>
-                <p>{{a.vehicle}}</p>
-            </article>
-            {% endfor %}
+        {% for a in attendees %}
+        <article>
+            <h4>{{a.name}}</h4>
+            <p>{{a.vehicle}}</p>
+        </article>
+        {% endfor %}
     </article>
 
     <article>
@@ -43,15 +42,19 @@
         <h2>Trip location and directions</h2>
 
         <article id="destination">
-            <img src="/static/images/trip-destination.png" style="height: auto; width: 1rem;"><h3>Trip Destination</h3>
+            <img src="/static/images/trip-destination.png" style="height: auto; width: 1rem;">
+            <h3>Trip Destination</h3>
             <p>{{trip.location}}</p>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}" target="_blank"><button>Open in Maps</button></a>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}"
+                target="_blank"><button>Open in Maps</button></a>
         </article>
 
         <article id="meeting">
-            <img src="/static/images/meeting-point.png" style="height: auto; width: 1rem;"><h3>Meeting Point</h3>
+            <img src="/static/images/meeting-point.png" style="height: auto; width: 1rem;">
+            <h3>Meeting Point</h3>
             <p>{{trip.meeting}}</p>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}" target="_blank"><button>Open in Maps</button></a>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}"
+                target="_blank"><button>Open in Maps</button></a>
 
         </article>
     </article>

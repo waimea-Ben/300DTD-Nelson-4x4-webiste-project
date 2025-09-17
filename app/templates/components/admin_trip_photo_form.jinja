@@ -1,14 +1,14 @@
 <div style="position: relative;">
     <button 
         style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 1.2em; cursor: pointer;"
-        hx-get="/trips/{{ trips.id }}/details"
+        hx-put="/trips/{{ trips.id }}/edit"
         hx-target="#trip-{{ trips.id }}"
         hx-swap="innerHTML"
         aria-label="Close"
     >
         ❌
     </button>
-
+    <h3>{{ trips.name }}</h3>
     <form 
         hx-post="/trips/{{ trips.id }}/add-photos"
         hx-target="#trip-{{ trips.id }}"

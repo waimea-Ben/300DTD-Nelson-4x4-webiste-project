@@ -1,65 +1,77 @@
-<form 
-    hx-put="/trips/{{ trips.id }}/edit"
-    hx-target="#trip-{{ trips.id }}"
-    hx-swap="innerHTML"
->
-  <label>Name:
-  <input type="text" name="name" value="{{ trips.name }}" required>
-  </label>
-
-  <label>Location:
-  <input type="text" name="location" value="{{ trips.location }}" required>
-  </label>
-
-  <label>Date:
-  <input type="date" name="date" value="{{ trips.date }}" required>
-  </label>
-
-  <label for="leader">Leader:</label>
-  <select name="leader" id="leader">
-    {% for member in members %}
-      <option 
-        value="{{ member.id }}"
-        {% if trips.leader == member.id %} selected {% endif %}
-      >
-        {{ member.name }}
-      </option>
-    {% endfor %}
-  </select>
-
-
-  <label for="difficulty">Difficulty:</label>
-    <select id="difficulty" name="difficulty">
-      <option value="Easy" {% if trips.grade == "Easy" %}selected{% endif %}>Easy</option>
-
-      <option value="Moderate" {% if trips.grade == "Moderate" %}selected{% endif %}>Moderate</option>
-
-      <option value="Challenging" {% if trips.grade == "Challenging" %}selected{% endif %}>Challenging</option>
-    </select>
-
-<label>summary:
-  <textarea name="summary" rows="4" cols="50">{{ trips.summary }}</textarea>
-</label>
-
-<label>Photos:</label>
-<div class="trip-photos">
-  {% if photos %}
-    {% for photo in photos %}
-      <img 
-        src="data:{{ photo.image_type }};base64,{{ photo.image_data|b64encode }}"
-        alt="Trip Photo"
-        style="width:100px; cursor:pointer; margin:5px;"
-        title="Click to delete"
-        hx-delete="/trips/{{ trips.id }}/photos/{{ photo.id }}/delete"
+<div style="position: relative;">
+  <button 
+        style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 1.2em; cursor: pointer;"
+        hx-put="/trips/{{ trips.id }}/edit"
         hx-target="#trip-{{ trips.id }}"
         hx-swap="innerHTML"
-      >
-    {% endfor %}
-  {% else %}
-    <p>No photos yet.</p>
-  {% endif %}
-</div>
+        aria-label="Close"
+    >
+        ❌
+  </button>
+  <h3>{{ trips.name }}</h3>
+  <form 
+      hx-put="/trips/{{ trips.id }}/edit"
+      hx-target="#trip-{{ trips.id }}"
+      hx-swap="innerHTML"
+  >
+    <label>Name:
+    <input type="text" name="name" value="{{ trips.name }}" required>
+    </label>
 
-<button type="submit">Save</button>
-</form>
+    <label>Location:
+    <input type="text" name="location" value="{{ trips.location }}" required>
+    </label>
+
+    <label>Date:
+    <input type="date" name="date" value="{{ trips.date }}" required>
+    </label>
+
+    <label for="leader">Leader:</label>
+    <select name="leader" id="leader">
+      {% for member in members %}
+        <option 
+          value="{{ member.id }}"
+          {% if trips.leader == member.id %} selected {% endif %}
+        >
+          {{ member.name }}
+        </option>
+      {% endfor %}
+    </select>
+
+
+    <label for="difficulty">Difficulty:</label>
+      <select id="difficulty" name="difficulty">
+        <option value="Easy" {% if trips.grade == "Easy" %}selected{% endif %}>Easy</option>
+
+        <option value="Moderate" {% if trips.grade == "Moderate" %}selected{% endif %}>Moderate</option>
+
+        <option value="Challenging" {% if trips.grade == "Challenging" %}selected{% endif %}>Challenging</option>
+      </select>
+
+  <label>summary:
+    <textarea name="summary" rows="4" cols="50">{{ trips.summary }}</textarea>
+  </label>
+
+  <label>Photos:</label>
+  <div class="trip-photos">
+    {% if photos %}
+      {% for photo in photos %}
+        <img 
+          src="data:{{ photo.image_type }};base64,{{ photo.image_data|b64encode }}"
+          alt="Trip Photo"
+          style="width:100px; cursor:pointer; margin:5px;"
+          title="Click to delete"
+          hx-delete="/trips/{{ trips.id }}/photos/{{ photo.id }}/delete"
+          hx-target="#trip-{{ trips.id }}"
+          hx-swap="innerHTML"
+        >
+      {% endfor %}
+    {% else %}
+      <p>No photos yet.</p>
+    {% endif %}
+  </div>
+
+  <button type="submit">Save</button>
+  </form>
+</div>
 

@@ -25,8 +25,9 @@ Nelson 4WD Club
     <article id="extra-info">
         <p>Check out some of our recent adventures around the top of the South Island! Our club regularly explores the stunning landscapes from Golden Bay to the Richmond Ranges, tackling everything from gentle forest tracks to challenging high-country terrain. Every trip is an opportunity to discover new places, test your 4WD skills, and make lasting friendships with fellow enthusiasts.</p>
     </article>
+</section>
 
-<section id="homeRecent"></section>
+<section id="homeRecent">
     {% for trip in past_trips %}
     <article>
         <header>
@@ -38,9 +39,9 @@ Nelson 4WD Club
             {% endif %}
         </header>
         <h3>{{ trip.name }}</h3>
-        <p>{{ trip.location }}</p>
+        <p id="location">📍{{ trip.location }}</p>
         <p>{{ trip.summary }}</p>
-        <p><strong>Date:</strong> {{ trip.date }}</p>
+        <p id="date">{{ trip.date|nicedate }}</p>
     </article>
     {% endfor %}
 

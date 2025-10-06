@@ -9,38 +9,46 @@ Past trips
 
 
 {% block content %}
+<page id="past_trips">
+<hr class="header-line">
+    <h1>Past Trips</h1>
 
-<h1>Past Trips</h1>
+    {% for trip in past_trips %}
+    <article>
+        <header>
+            <div class="header-left">
+                <h2>{{ trip.name }}</h2>
+                <p id="location">📍{{ trip.location }}</p>
+            </div>
 
-{% for trip in past_trips %}
-<article>
-    <header>
-        <h2>{{ trip.name }}</h2>
-        <p>{{ trip.date }}</p>
-        <p>Led by {{ trip.leader_name }}</p>
-    </header>
+            <div class="header-right">
+                <p id="date">{{ trip.date|nicedate }}</p>
+                <p>Led by {{ trip.leader_name }}</p>
+            </div>
+        </header>
 
-    <p>{{ trip.location }}</p>
-    <p>{{ trip.summary }}</p>
 
-    {% if session.member_id %}
-    <p>attendees</p>
-    <ul>
-        {% for attendee in trip.attendees %}
-        <li>{{ attendee.name }}</li>
+       
+        <p>{{ trip.summary }}</p>
+
+        {% if session.member_id %}
+        <p>attendees</p>
+        <ul>
+            {% for attendee in trip.attendees %}
+            <li>{{ attendee.name }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+
+        {% for photo in trip.photos %}
+        <div>
+            <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200">
+            <small>{{ photo.credits }}</small>
+        </div>
         {% endfor %}
-    </ul>
-    {% endif %}
-
-
-    {% for photo in trip.photos %}
-    <div>
-        <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200">
-        <small>{{ photo.credits }}</small>
-    </div>
+    </article>
     {% endfor %}
-</article>
-{% endfor %}
-
+</page>
 
 {% endblock %}

@@ -132,14 +132,14 @@ header li strong a{
 }
 /* ***************************************************************************************************************** */
 /* recent adventures home p */
-#homeRecent{
+/* #homeRecent{ */
 
-}
 
-#homeRecent h2{
+
+h2{
     font-size: 2.25rem;
     font-weight: bold;
-    margin-top: 2rem;
+    margin-top: 1rem;
     margin-bottom: 1rem;
 }
 
@@ -147,6 +147,7 @@ header li strong a{
   font-size: 0.8rem;
   background-color: #F0FDF4;
   border: #b6f7cb solid 1px;
+  margin: 0;
   
 }
 #extra-info p{
@@ -155,6 +156,8 @@ header li strong a{
   text-align: center;
   color: #166534;
 }
+/* ***************************************************************************************************************** */
+/* Recent trip styling */
 
 #homeRecent{
   display: flex;
@@ -163,10 +166,48 @@ header li strong a{
   margin: 2rem 0;
 }
 
+#homeRecent article{
+  display: block;
+  text-align: left;
+  padding: 20px;
+  min-width: 40%;
+  margin: 1rem;
+  border: #E7E5E4 solid 1px;
+  border-radius: 10px;
+}
+#homeRecent article header{
+  height: 15rem;          /* or whatever height fits your design */
+  overflow: hidden;       /* hides tall parts of the image */
+  position: relative;
+}
+
+#homeRecent img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* crop instead of stretch */
+  object-position: center; /* center the crop */
+  display: block;
+  border-radius: 8px 8px 0 0;
+}
+
+#homeRecent h3{
+  color: #166534;
+  margin-bottom: 0;
+}
+#location{
+  color: #57534e;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+#date{
+  color: #78716c;
+  font-size: 0.8rem;
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+}
 
 /* ***************************************************************************************************************** */
-/* ***************************************************************************************************************** */
-/* ***************************************************************************************************************** */
+
 /* Join the club Styling */
 #Join_the_club{
   padding-top: 1rem;
@@ -218,3 +259,42 @@ header li strong a{
 }
 
 /* ***************************************************************************************************************** */
+/* PAST TRIPS PAGE */
+/* ***************************************************************************************************************** */
+page#past_trips h1{
+  margin-top: 0.5rem;
+  font-size: 2rem;
+
+}
+
+#past_trips article{
+  display: block;
+}
+
+#past_trips article header{
+  padding: 1rem;
+  background-color: #f0fdf4;
+  display: flex;
+  justify-content: space-between;  /* name/location on left, date/leader on right */
+  align-items: center;             /* vertically center them */
+  height: auto;                    /* remove the fixed 15rem height */
+  overflow: visible;               /* so text isn't cut off */
+  position: relative;
+}
+#past_trips article header h2{
+  color: #166534;
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+}
+#past_trips article header *{
+  margin:0;
+}
+
+.header-left p,
+.header-right p {
+  margin: 0.25rem 0;
+}
+
+.header-right {
+  text-align: right;
+}

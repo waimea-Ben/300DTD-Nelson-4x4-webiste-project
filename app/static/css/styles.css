@@ -9,6 +9,19 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Inter', sans-serif;
 }
 
+/* use like: <p class="multiline-ellipsis" style="--lines:3">...text...</p> */
+.multiline-ellipsis {
+  --lines: 3;                    /* default number of lines */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* keep these so it behaves like normal paragraph */
+  white-space: normal;
+  line-height: 1.4;              /* important if you use height fallbacks */
+}
+
 /* ABOUT PAGE -------------------------------------------- */
 
 #tech-stack {
@@ -170,7 +183,7 @@ h2{
   display: block;
   text-align: left;
   padding: 20px;
-  min-width: 40%;
+  width: 40%;
   margin: 1rem;
   border: #E7E5E4 solid 1px;
   border-radius: 10px;
@@ -297,4 +310,104 @@ page#past_trips h1{
 
 .header-right {
   text-align: right;
+}
+
+#past_trips #photos{
+  display: flex;
+  justify-content: flex-end; /* push to the right */
+  align-items: center;       /* vertically align */
+  flex-wrap: nowrap;         /* prevent wrapping */
+  margin: 2rem 0;
+  gap: 1rem; /* space between images */
+}
+
+#past_trips img{
+  max-width: 100%;
+  border-radius: 0.5rem;
+}
+
+.trip-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin: 1rem 0 2rem;
+}
+
+.trip-text {
+  flex: 1;
+}
+
+.trip-photos {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  gap: 1rem;
+  max-width: 50%;
+}
+
+.photo {
+  position: relative;
+  flex: 1;
+}
+
+.photo img {
+  width: 100%;
+  border-radius: 0.5rem;
+  display: block;
+  object-fit: cover;
+  /* max-height: 20rem; */
+  aspect-ratio: 1;
+  position: relative;
+}
+
+.photo input[type="checkbox"] {
+  display: none;
+}
+
+.photo label {
+  user-select: none;
+}
+
+.photo label:hover {
+  cursor: zoom-in;
+}
+
+.photo:has(input[type="checkbox"]:checked) label:hover {
+  cursor: zoom-out;
+}
+
+.photo:has(input[type="checkbox"]:checked) img {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+  padding: 10vh 10vw;
+  aspect-ratio: auto;
+  object-fit:contain;
+  z-index: 1000;
+}
+
+.photo:has(input[type="checkbox"]:checked)::after {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+  background-color: #000c;
+  z-index: 999;
+} */
+
+.photo .credit {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  color: white;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
 }

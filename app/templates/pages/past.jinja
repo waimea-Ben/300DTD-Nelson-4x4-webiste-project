@@ -22,31 +22,40 @@ Past trips
             </div>
 
             <div class="header-right">
-                <p id="date">{{ trip.date|nicedate }}</p>
                 <p>Led by {{ trip.leader_name }}</p>
+                <p id="date">{{ trip.date|nicedate }}</p>
             </div>
         </header>
 
 
        
-        <p>{{ trip.summary }}</p>
+        <div class="trip-body">
+            <div class="trip-text">
+                <p>{{ trip.summary }}</p>
 
-        {% if session.member_id %}
-        <p>attendees</p>
-        <ul>
-            {% for attendee in trip.attendees %}
-            <li>{{ attendee.name }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+                {% if session.member_id %}
+                <p>Attendees</p>
+                <ul>
+                    {% for attendee in trip.attendees %}
+                    <li>{{ attendee.name }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
 
-
-        {% for photo in trip.photos %}
-        <div>
-            <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}" width="200">
-            <small>{{ photo.credits }}</small>
+            <div class="trip-photos">
+                {% for photo in trip.photos %}
+                <div class="photo">
+                    <label>
+                        <input type="checkbox">
+                        <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}">
+                    </label>
+                    <span class="credit">{{ photo.credits }}</span>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        {% endfor %}
+
     </article>
     {% endfor %}
 </page>

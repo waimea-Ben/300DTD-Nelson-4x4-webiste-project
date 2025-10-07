@@ -40,7 +40,7 @@ Nelson 4WD Club
         </header>
         <h3>{{ trip.name }}</h3>
         <p id="location">📍{{ trip.location }}</p>
-        <p>{{ trip.summary }}</p>
+        <p class="multiline-ellipsis">{{ trip.summary }}</p>
         <p id="date">{{ trip.date|nicedate }}</p>
     </article>
     {% endfor %}

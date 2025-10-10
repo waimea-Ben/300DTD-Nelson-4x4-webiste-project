@@ -9,14 +9,16 @@ Upcoming Trips
 
 
 {% block content %}
+<hr class="header-line">
 
-<h1>Upcoming Trips</h1>
-<h2>Reserve a spot on a trip</h2>
+<h1 id="upcoming-title">Upcoming Trips</h1>
+<p>Join us on our next adventure around the top of the South Island! Browse upcoming trips and reserve your spot. All skill levels welcome - from beginners to experienced off-roaders.</p>
 
 <div class="trip-card">
-    <h3>Available trips</h3>
-    <p>click on a trip to view full details
-    <p>
+    <header>
+        <h3>Available trips</h3>
+        <p>Click on any trip name to see full details including interactive maps</p>
+    </header>
     <table>
         <thead>
             <tr>
@@ -39,7 +41,7 @@ Upcoming Trips
 
                 </td>
                 <td>{{ trip.location }}</td>
-                <td>{{ trip.date }}</td>
+                <td>{{ trip.date|nicedateshort }}</td>
                 <td>{{ trip.grade }}</td>
                 <td>
                     <form method="post"
@@ -58,7 +60,7 @@ Upcoming Trips
 <div id="upcoming-extras">
     <article id="What-to-bring">
         <header>
-            <h2>What to bring</h2>
+            <h4>What to bring</h4>
         </header>
         <ul>
             <li>Recovery gear (snatch strap, shackles, bow shackles)</li>
@@ -74,17 +76,17 @@ Upcoming Trips
 
     <article id="guidelines">
         <header>
-            <h2>Guidlines</h2>
+            <h4>Guidlines</h4>
         </header>
         <ul>
             <li>All participants must have a 4WD vehicle in good working condition.</li>
-            <li>Drivers should have basic off-road driving skills and knowledge of vehicle recovery techniques.</li>
+            <li>Follow all DOC and landowner rules</li>
             <li>Participants must carry the required gear and equipment listed above.</li>
             <li>Follow the instructions of the trip leader at all times.</li>
-            <li>Respect the environment and adhere to the principles of Leave No Trace.</li>
-            <li>Never loose sight of vehicle behindt you.</li>
+            <li>Adhere to the principles of Leave No Trace.</li>
+            <li>Never loose sight of vehicle behind you.</li>
             <li>Ensure your vehicle is fueled and serviced before the trip.</li>
-            <li>Inform the trip leader of any medical conditions or special requirements.</li>
+            <li>Inform the trip leader of any special requirements.</li>
 
         </ul>
     </article>

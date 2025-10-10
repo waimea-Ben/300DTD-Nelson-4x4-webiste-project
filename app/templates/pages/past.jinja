@@ -31,10 +31,11 @@ Past trips
        
         <div class="trip-body">
             <div class="trip-text">
+            <h4>Trip summary</h3>
                 <p>{{ trip.summary }}</p>
 
                 {% if session.member_id %}
-                <p>Attendees</p>
+                <h4>Attendees</h4>
                 <ul>
                     {% for attendee in trip.attendees %}
                     <li>{{ attendee.name }}</li>

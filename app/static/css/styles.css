@@ -303,6 +303,10 @@ page#past_trips h1{
   margin:0;
 }
 
+#past_trips li{
+  list-style: disc;
+}
+
 .header-left p,
 .header-right p {
   margin: 0.25rem 0;
@@ -341,6 +345,7 @@ page#past_trips h1{
 .trip-photos {
   display: flex;
   flex: 1;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 1rem;
   max-width: 50%;
@@ -348,7 +353,7 @@ page#past_trips h1{
 
 .photo {
   position: relative;
-  flex: 1;
+  width: 45%;
 }
 
 .photo img {
@@ -367,6 +372,7 @@ page#past_trips h1{
 
 .photo label {
   user-select: none;
+  margin: 0;
 }
 
 .photo label:hover {
@@ -399,15 +405,150 @@ page#past_trips h1{
   content: "";
   background-color: #000c;
   z-index: 999;
-} */
+} 
 
 .photo .credit {
+  display: block;
   position: absolute;
-  bottom: 6px;
-  left: 8px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.2em 0.7em;
   color: white;
-  font-size: 0.9em;
+  font-size: 0.9rem;
   background: rgba(0, 0, 0, 0.5);
-  padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+/* ***************************************************************************************************************** */
+/* UPCOMING TRIPS PAGE */
+/* ***************************************************************************************************************** */
+#upcoming-title{
+  margin-top: 1rem;
+  font-size: 2rem;
+  color: #000;
+}
+
+.trip-card{
+  border-radius: 0.5rem;
+  border: #d9d9d9 solid 1px;
+}
+
+.trip-card header{
+  padding: 0.75rem;
+  background-color: #f0fdf4;
+}
+
+.trip-card header h3{
+  color: #166534;
+  font-size: 1.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.trip-card header p{
+  margin:0;
+  color: #78716c;
+  font-size: 0.75rem;
+}
+
+.trip-card th{
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: #d9d9d9 solid 1px;
+  background-color: #f9f9f9;
+}
+
+.trip-card button{
+  background-color: #15803d;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  margin: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin:0.5rem 0rem;
+
+}
+
+#upcoming-extras{
+  display: flex;
+  justify-content: space-between; /* space between them */
+  align-items: flex-start;        /* align to top */
+  flex-wrap: wrap;                /* allows wrapping on small screens */
+  gap: 0rem;     
+  margin-top: 2rem;
+}
+
+#guidelines,
+#What-to-bring {
+  width: 49%;
+  display: flex;
+  flex-direction: column;
+  border: #d9d9d9 solid 1px;
+}
+
+#guidelines header{background-color: #f0fdf4;}
+#guidelines h4 {color:#166534; padding: 0.75rem; margin:0;}
+#What-to-bring h4{color: #92400e; padding: 0.75rem; margin:0;}
+#What-to-bring header{background-color: #FFFBEB;}
+
+#upcoming-extras li{
+  list-style: disc;
+  font-size: 0.75rem;
+}
+/* ***************************************************************************************************************** */
+/* UPCOMING TRIPS OVERLAY */
+/* ***************************************************************************************************************** */
+#overlay-content{
+  border-radius: 0.5rem;
+}
+
+#trip-info h1{
+  font-size: 2rem;
+  color: #166534;
+}
+
+#overlay {
+  position: relative; /* makes the close button position relative to this */
+}
+
+.close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+.close-btn:hover {
+  color: red;
+  cursor: pointer;
+}
+
+#trip-info article{
+  border: #d9d9d9 solid 1px;
+  border-radius: 0.5rem;
+}
+
+#trip-info h3{
+  font-size: 1.25rem;
+}
+
+#trip-info #participant{
+  background-color: #fafaf9;
+  border: none;
+  box-shadow: none;
+  padding: 1rem;
+}
+#trip-info #participant h4{
+  margin: 0;
+  color: #0c0a09;
+}
+
+#trip-info #participant p{
+  margin: 0;
+  color: #57534e;
 }

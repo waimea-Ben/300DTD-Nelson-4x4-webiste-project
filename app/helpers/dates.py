@@ -88,6 +88,12 @@ def _timestamp_friendly(
 def _date_friendly(date_str):
     return _timestamp_friendly(date_str, ISO_DATE_FORMAT, "%d %B %Y")
 
+#-----------------------------------------------------------
+# Convert a given date to a more friendly DD/MM/YYY format
+#-----------------------------------------------------------
+def _dateshort_friendly(date_str):
+    return _timestamp_friendly(date_str, ISO_DATE_FORMAT, "%a, %d %b %Y")
+
 
 #-----------------------------------------------------------
 # Convert a given date to a more friendly day of the week format
@@ -114,6 +120,7 @@ def init_datetime(app):
     # Register Jinja filters for friendly versions
     app.jinja_env.filters['nicetimestamp']  = _timestamp_friendly
     app.jinja_env.filters['nicedate']       = _date_friendly
+    app.jinja_env.filters['nicedateshort']       = _dateshort_friendly
     app.jinja_env.filters['nicetime']       = _time_friendly
     app.jinja_env.filters['niceday']        = _day_friendly
 

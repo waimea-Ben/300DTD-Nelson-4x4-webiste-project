@@ -1,33 +1,30 @@
 <div id="trip-info">
-    <div style="text-align:right;">
-        <a href="#" onclick="document.getElementById('overlay').style.display='none'; return false;">X</a>
-    </div>
+    <a href="#" class="close-btn" onclick="document.getElementById('overlay').style.display='none'; return false;">×</a>
+
 
     <h1>{{trip.name}}</h1>
-    <p>{{trip.location}} {{trip.date}}</p>
+    <p>📍{{trip.location}}  📆{{trip.date|nicedate}}</p>
 
-
-
-    <article>
-        <h2>Trip Overview</h2>
+    <article id="overview">
+        <h3>Trip Overview</h3>
         <p>{{trip.notes}}</p>
         <p><strong>Trip Leader:</strong> {{ trip.leader_name or 'TBA' }}</p>
         <p><strong>Difficulty:</strong> {{trip.grade}}</p>
-        <p><strong>Meeting Time:</strong> {{trip.date}}</p>
+        <p><strong>Meeting date:</strong> {{trip.date|nicedateshort}}</p>
     </article>
 
-    <article>
-        <h2>Participants</h2>
+    <article id="participants">
+        <h3>Participants</h3>
         {% for a in attendees %}
-        <article>
+        <article id="participant">
             <h4>{{a.name}}</h4>
             <p>{{a.vehicle}}</p>
         </article>
         {% endfor %}
     </article>
 
-    <article>
-        <h2>Required Gear & Equipment</h2>
+    <article id="gear">
+        <h3>Required Gear & Equipment</h3>
         <li>Recovery gear (snatch strap, shackles, bow shackles)</li>
         <li>Winch or come-along (optional)</li>
         <li>First aid kit</li>
@@ -38,7 +35,7 @@
         <li>Torch/headlamp with spare batteries</li>
     </article>
 
-    <article>
+    <article id="map">
         <h2>Trip location and directions</h2>
 
         <article id="destination">

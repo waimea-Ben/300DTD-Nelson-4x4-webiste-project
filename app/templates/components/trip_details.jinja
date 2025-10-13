@@ -35,24 +35,31 @@
         <li>Torch/headlamp with spare batteries</li>
     </article>
 
-    <article id="map">
-        <h2>Trip location and directions</h2>
+    <article id="trip_directions">
+        <header>
+            <h2>Trip location and directions</h2>
+        </header>
+        <article id="map"></article>
+            <article id="destination">
+                <img src="/static/images/trip-destination.png" style="height: auto; width: 1rem;">
+                <div class="details">
+                    <h3>Trip Destination</h3>
+                    <p>{{trip.location}}</p>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}"
+                    target="_blank"><button>Open in Maps</button></a>
+            </article>
 
-        <article id="destination">
-            <img src="/static/images/trip-destination.png" style="height: auto; width: 1rem;">
-            <h3>Trip Destination</h3>
-            <p>{{trip.location}}</p>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}"
-                target="_blank"><button>Open in Maps</button></a>
-        </article>
+            <article id="meeting">
+                <img src="/static/images/meeting-point.png" style="height: auto; width: 1rem;">
+                <div class="details">
+                    <h3>Meeting Point</h3>
+                    <p>{{trip.meeting}}</p>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}"
+                    target="_blank"><button>Open in Maps</button></a>
 
-        <article id="meeting">
-            <img src="/static/images/meeting-point.png" style="height: auto; width: 1rem;">
-            <h3>Meeting Point</h3>
-            <p>{{trip.meeting}}</p>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}"
-                target="_blank"><button>Open in Maps</button></a>
-
-        </article>
+            </article>
+        
     </article>
 </div>

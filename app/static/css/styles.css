@@ -541,14 +541,96 @@ page#past_trips h1{
   background-color: #fafaf9;
   border: none;
   box-shadow: none;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 #trip-info #participant h4{
   margin: 0;
   color: #0c0a09;
+  font-size: 1rem;
 }
 
 #trip-info #participant p{
   margin: 0;
   color: #57534e;
 }
+
+#gear li{
+  margin-left: 1rem;
+  list-style: disc;
+}
+
+#gear li::marker{
+  color: #16A34A;
+}
+
+h3{
+  color: #0c0a09;
+}
+
+#trip-info #destination{
+  position: relative;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+#trip-info #destination .details {
+  flex: 1;
+}
+
+#trip-info #destination .details > * {
+  margin: 0;
+}
+
+#trip-info #meeting{
+  position: relative;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  background-color: #F0FDF4;
+  border: 1px solid #bbf7d0;
+}
+
+#trip-info #meeting .details {
+  flex: 1;
+}
+
+#trip-info #meeting .details > * {
+  margin: 0;
+}
+
+#map{
+  height: 20rem;
+
+}
+
+/* Button style */
+#trip_directions #meeting a button {
+  background-color: transparent;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+  color: #15803d;
+}
+
+#trip_directions #destination a button {
+  background-color: transparent;
+  border: 1.5px solid #fecaca;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+  color: #b91c1c;
+}
+
+#trip_directions a button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.leaflet-control-layers.leaflet-control {
+  background: transparent;
+border: none;}
+
+.leafl

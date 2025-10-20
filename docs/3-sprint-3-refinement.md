@@ -10,10 +10,7 @@ Develop the system until it is fully featured, with a refined UI and it satisfie
 
 ## Updated Database Schema (if it changed)
 
-Replace this text with notes regarding the DB schema.
-
-![SCREENSHOT OF DB SCHEMA](screenshots/example.png)
-
+DB schema remains unchganged
 
 ---
 

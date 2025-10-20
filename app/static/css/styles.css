@@ -633,7 +633,7 @@ h3{
   background: transparent;
 }
 
-a[role=button] {
+#trip_directions a[role=button] {
    display: block; 
    background-color: transparent;
    border: none;
@@ -649,5 +649,63 @@ a[role=button] {
   padding: 1rem;
 }
 
-#trip_directions{
+/* ***************************************************************************************************************** */
+/* LOGIN PAGE STYLES */
+/* ***************************************************************************************************************** */
+#login{
+  margin: 3rem auto;
+  width: 40rem;
+  border: #d9d9d9 solid 1px;
+  border-radius: 0.5rem;
+ 
+}
+
+#login header{
+  text-align: center;
+  background-color: #F0FDF4;
+  padding: 2rem;
+}
+
+#login header h2{
+  color: #166534;
+  margin: 0;
+}
+
+#login p{
+  margin: 0;
+  color: #57534e;
+}
+
+#login label{
+  color: #0c0a09;
+  font-size: 0.8rem;
+}
+
+#login input{
+  height: 2rem;
+  border-radius: 0.5rem;
+}
+
+#login button{
+  width: 100%;
+  height: 2rem;
+  background-color: #15803d;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  line-height: normal;
+}
+
+#login footer{
+  text-align: center;
+  text-decoration: none;
+}
+
+
+#login footer a{
+  text-decoration: none;
 }

@@ -45,6 +45,10 @@ This project is a fully functional website for the **Nelson 4X4 Club**, built to
 
 ## Project Details  
 
+ADMIN ACCOUNT -> sophia.martin@email.com 12345678
+REGULAR ACCOUNT -> david.wilson@email.com 12345678
+
+
 This is a digital media and database project for **NCEA Level 3**, assessed against standards [91902](docs/as91902.pdf) and [91903](docs/as91903.pdf).  
 
 The project is a web app that uses [Flask](https://flask.palletsprojects.com) for the server back-end, connecting to a **SQLite** (development) and **Turso** (production) database. The final deployment of the app is on [Render](https://render.com/).  

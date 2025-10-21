@@ -9,6 +9,10 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Inter', sans-serif;
 }
 
+li a img{
+  height: 1rem;
+}
+
 /* use like: <p class="multiline-ellipsis" style="--lines:3">...text...</p> */
 .multiline-ellipsis {
   --lines: 3;                    /* default number of lines */
@@ -62,6 +66,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     padding: 4px; /* this creates the gap between bar and green background */
     box-sizing: border-box;
+    margin-top: 2rem;
   }
   
   .tab {
@@ -708,4 +713,75 @@ h3{
 
 #login footer a{
   text-decoration: none;
+}
+
+/* ***************************************************************************************************************** */
+/* SETTINGS PAGE STYLES */
+/* ***************************************************************************************************************** */
+#admin-settings{
+  margin: 3rem auto;
+  width: 40rem;
+  border: #d9d9d9 solid 1px;
+  border-radius: 0.5rem;
+}
+
+#admin-settings header{
+  background-color: #F0FDF4;
+  padding: 1rem;
+}
+
+#admin-settings h2{
+  color: #166534;
+  margin: 0;
+}
+
+#admin-settings p{
+  color: #78716c;
+  font-size: 0.8rem;
+}
+
+#admin-settings label{
+  color: #0c0a09;
+  font-size: 0.8rem;
+}
+
+#admin-settings input{
+  height: 2rem;
+  border-radius: 0.5rem;
+}
+
+#admin-settings button{
+  width: 100%;
+  height: 2rem;
+  background-color: #15803d;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  line-height: normal;
+}
+
+
+
+#member-details{
+  display: flex;
+  justify-content: space-between;
+}
+
+#member-details p{
+  margin: 0%;
+}
+
+#member-details [role=button] {
+  padding: 0.5rem;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  border: #d9d9d9 1px solid;
+}
+
+#member-details img {
+  height: 1.5rem;
 }

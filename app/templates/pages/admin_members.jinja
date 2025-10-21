@@ -10,7 +10,6 @@
 
 {% block content %}
 <hr class="header-line">
- <h1>Admin</h1>
 
 <div class="tab-bar">
     <a href="/admin/settings" class="tab">settings</a>
@@ -32,7 +31,6 @@
     </form>
 
     <a role="button" href="/admin/members/new" class="button">Add New Member</a>
-    <br>
 
     {% if members %}
         {% for member in members %}

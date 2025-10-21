@@ -10,7 +10,6 @@ Admin
 
 {% block content %}
 <hr class="header-line">
-<h1>Admin</h1>
 
 <div class="tab-bar">
     <a href="/admin/settings" class="tab active">settings</a>
@@ -18,26 +17,25 @@ Admin
     <a href="/admin/members" class="tab">Members</a>
 </div>
 
-<section id="trips-list">
-    <header>
-        <br>
-        <h2>Club Information</h2>
-        <p>Update basic club details</p>
-    </header>
+<article id="admin-settings">
+        <header>
+            <h2>Club Information</h2>
+            <p>Update basic club details</p>
+        </header>
 
-    <form method="post" action="/admin/settings">
-        <label>Site Name:</label>
-        <input type="text" name="site_name" value="{{ settings.site_name }}">
+        <form method="post" action="/admin/settings">
+            <label>Site Name:</label>
+            <input type="text" name="site_name" value="{{ settings.site_name }}">
 
-        <label>Join Price:</label>
-        <input type="number" step="0.01" name="join_price" value="{{ settings.join_price }}" min="0.00">
+            <label>Join Price:</label>
+            <input type="number" step="0.01" name="join_price" value="{{ settings.join_price }}" min="0.00">
 
-        <label>Contact Email:</label>
-        <input type="email" name="contact_email" value="{{ settings.contact_email }}">
+            <label>Contact Email:</label>
+            <input type="email" name="contact_email" value="{{ settings.contact_email }}">
 
-        <button type="submit">Save</button>
-    </form>
+            <button type="submit">Save</button>
+        </form>
 
-</section>
+</article>
 
 {% endblock %}

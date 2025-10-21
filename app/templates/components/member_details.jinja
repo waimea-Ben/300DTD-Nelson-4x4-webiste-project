@@ -1,6 +1,10 @@
-<strong>{{ member.name }}</strong>
-<p>{{ member.vehicle }}</p>
-<button hx-get="/members/{{ member.id }}/edit" hx-target="#member-{{ member.id }}" hx-swap="innerHTML">Edit</button>
-
-
-<a href="/members/{{ member.id }}/delete" role="button">Delete</a>
+<div id="member-details">
+    <div>
+        <strong>{{ member.name }}</strong>
+        <p>{{ member.vehicle }}</p>
+    </div>
+    <div>
+        <button role="button" hx-get="/members/{{ member.id }}/edit" hx-target="#member-{{ member.id }}" hx-swap="innerHTML"><img src="/static/images/edit.png"></button>
+        <a href="/members/{{ member.id }}/delete" role="button"><img src="/static/images/bin.png"></a>
+    </div>
+</div>

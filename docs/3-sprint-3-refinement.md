@@ -22,7 +22,7 @@ The web app is fully implemented with a refined UI:
 
 ## Testing Feature: Member Management
 
-Testing the addition, editing, and deletion of members, including admin permissions.
+Testing the addition, editing, and deletion of members.
 
 **PLACE SCREENSHOTS AND/OR ANIMATED GIFS OF THE TESTING HERE**
 

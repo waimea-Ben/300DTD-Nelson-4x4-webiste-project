@@ -1,4 +1,9 @@
- <div id="tripNButtons">
+{# ============================================================
+   Trip display block — shows details and action buttons
+============================================================ #}
+<div id="tripNButtons">
+
+    {# Trip details section #}
     <div id="trip-deets">
         <h3>{{ trips.name }}</h3>
         <p>{{ trips.location }}, {{ trips.date|nicedate }}</p>
@@ -6,27 +11,31 @@
         <p><strong>Difficulty:</strong> {{ trips.grade }}</p>
         <p>{{ trips.description }}</p>
     </div>
+
+    {# Action buttons: edit, delete, and add photos (for past trips) #}
     <div id="trip-buttons">
-    <div>
-        <button 
-            hx-get="/trips/{{ trips.id }}/edit"
-            hx-target="#trip-{{ trips.id }}"
-            hx-swap="innerHTML"
-            role="button">
-            <img src="/static/images/edit.png">
-        </button>
-
-        <a role="button" href="/trips/{{ trips.id }}/delete"><img src="/static/images/bin.png"></a>
-
-        {% if trips.is_past %}
+        <div>
             <button 
-                hx-get="/trips/{{ trips.id }}/add-photos"
+                hx-get="/trips/{{ trips.id }}/edit"
                 hx-target="#trip-{{ trips.id }}"
                 hx-swap="innerHTML"
                 role="button">
-                <img src="/static/images/+.png">
+                <img src="/static/images/edit.png">
             </button>
-        {% endif %}
+
+            <a role="button" href="/trips/{{ trips.id }}/delete">
+                <img src="/static/images/bin.png">
+            </a>
+
+            {% if trips.is_past %}
+                <button 
+                    hx-get="/trips/{{ trips.id }}/add-photos"
+                    hx-target="#trip-{{ trips.id }}"
+                    hx-swap="innerHTML"
+                    role="button">
+                    <img src="/static/images/+.png">
+                </button>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -89,7 +89,7 @@ def home_past_trips():
 # -----------------------------------------------------------
 # Past trips page route
 # -----------------------------------------------------------
-@app.get("/past/")
+@app.get("/past")
 def past_trips():
     with connect_db() as client:
         # Step 1: Fetch past trips with leader info
@@ -550,7 +550,7 @@ def admin_members():
 
 
 # #-----------------------------------------------------------
-@app.get("/upcoming/")
+@app.get("/upcoming")
 @login_required
 def upcoming_trips():
     member_id = session["member_id"]

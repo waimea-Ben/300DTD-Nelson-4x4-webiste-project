@@ -1,64 +1,72 @@
 {% extends 'pages/base.jinja' %}
 
-
 {% block title %}
-
 Past trips
-
 {% endblock %}
 
-
 {% block content %}
+
+{# -------------------------------------------------------------
+   Past Trips Page
+   Lists all past trips with summary, attendees, and photos
+------------------------------------------------------------- #}
 <page id="past_trips">
 <hr class="header-line">
-    <h1>Past Trips</h1>
+<h1>Past Trips</h1>
 
-    {% for trip in past_trips %}
-    <article>
-        <header>
-            <div class="header-left">
-                <h2>{{ trip.name }}</h2>
-                <p id="location">📍{{ trip.location }}</p>
-            </div>
+{# Loop over all past trips #}
+{% for trip in past_trips %}
+<article>
 
-            <div class="header-right">
-                <p>Led by {{ trip.leader_name }}</p>
-                <p id="date">{{ trip.date|nicedate }}</p>
-            </div>
-        </header>
-
-
-       
-        <div class="trip-body">
-            <div class="trip-text">
-            <h4>Trip summary</h3>
-                <p>{{ trip.summary }}</p>
-
-                {% if session.member_id %}
-                <h4>Attendees</h4>
-                <ul>
-                    {% for attendee in trip.attendees %}
-                    <li>{{ attendee.name }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
-
-            <div class="trip-photos">
-                {% for photo in trip.photos %}
-                <div class="photo">
-                    <label>
-                        <input type="checkbox">
-                        <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}">
-                    </label>
-                    <span class="credit">{{ photo.credits }}</span>
-                </div>
-                {% endfor %}
-            </div>
+    {# Trip header with name, location, leader, and date #}
+    <header>
+        <div class="header-left">
+            <h2>{{ trip.name }}</h2>
+            <p id="location">📍{{ trip.location }}</p>
         </div>
 
-    </article>
-    {% endfor %}
+        <div class="header-right">
+            <p>Led by {{ trip.leader_name }}</p>
+            <p id="date">{{ trip.date|nicedate }}</p>
+        </div>
+    </header>
+
+    {# Trip body containing summary, attendees, and photos #}
+    <div class="trip-body">
+
+        {# Text section with summary and attendees #}
+        <div class="trip-text">
+            <h4>Trip summary</h4>
+            <p>{{ trip.summary }}</p>
+
+            {# Show attendees only if user is logged in #}
+            {% if session.member_id %}
+            <h4>Attendees</h4>
+            <ul>
+                {% for attendee in trip.attendees %}
+                <li>{{ attendee.name }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        {# Photo gallery section #}
+        <div class="trip-photos">
+            {% for photo in trip.photos %}
+            <div class="photo">
+                <label>
+                    <input type="checkbox">
+                    <img src="data:{{ photo.image_type }};base64,{{ photo.image_data | b64encode }}">
+                </label>
+                <span class="credit">{{ photo.credits }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</article>
+{% endfor %}
+
 </page>
 
 {% endblock %}

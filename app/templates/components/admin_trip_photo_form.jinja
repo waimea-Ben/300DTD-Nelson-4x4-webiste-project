@@ -1,4 +1,9 @@
+{# ============================================================
+   Add Photo Form — allows uploading new photos for a trip
+============================================================ #}
 <div style="position: relative;">
+
+    {# Close button — reloads trip details view via HTMX PUT #}
     <button 
         style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 1.2em; cursor: pointer;"
         hx-put="/trips/{{ trips.id }}/edit"
@@ -8,7 +13,10 @@
     >
         ❌
     </button>
+
     <h3>{{ trips.name }}</h3>
+
+    {# Form to upload a new photo (multipart for file upload) #}
     <form 
         hx-post="/trips/{{ trips.id }}/add-photos"
         hx-target="#trip-{{ trips.id }}"

@@ -1,39 +1,51 @@
 {% extends 'pages/base.jinja' %}
 
-
 {% block title %}
-
 Nelson 4WD Club
-
 {% endblock %}
-
 
 {% block content %}
 <hr class="header-line">
+
+{# -------------------------------------------------------------
+   Hero section
+   Main welcome message and club description
+------------------------------------------------------------- #}
 <section id="Hero">
-
     <h1>{{ settings.site_name }}</h1>
-
-    <p>Join us for exciting off-road adventures across the top
+    <p>
+        Join us for exciting off-road adventures across the top
         of the South Island. From beginners to experts,
         everyone is welcome in our friendly
-        community of 4WD enthusiasts.</p>
-
+        community of 4WD enthusiasts.
+    </p>
 </section>  
 
-    <h2>Recent Adventures</h2>
-    <article id="extra-info">
-        <p>Check out some of our recent adventures around the top of the South Island! Our club regularly explores the stunning landscapes from Golden Bay to the Richmond Ranges, tackling everything from gentle forest tracks to challenging high-country terrain. Every trip is an opportunity to discover new places, test your 4WD skills, and make lasting friendships with fellow enthusiasts.</p>
-    </article>
-</section>
+{# -------------------------------------------------------------
+   Recent adventures intro
+------------------------------------------------------------- #}
+<h2>Recent Adventures</h2>
+<article id="extra-info">
+    <p>
+        Check out some of our recent adventures around the top of the South Island! 
+        Our club regularly explores the stunning landscapes from Golden Bay to the Richmond Ranges, 
+        tackling everything from gentle forest tracks to challenging high-country terrain. 
+        Every trip is an opportunity to discover new places, test your 4WD skills, and make lasting friendships 
+        with fellow enthusiasts.
+    </p>
+</article>
 
+{# -------------------------------------------------------------
+   Past trips list
+   Displays thumbnails, name, location, summary, and date
+------------------------------------------------------------- #}
 <section id="homeRecent">
     {% for trip in past_trips %}
     <article>
         <header>
             {% if trip.photos %}
             <img src="data:{{ trip.photos[0].image_type }};base64,{{ trip.photos[0].image_data | b64encode }}"
-                alt="{{ trip.photos[0].credits }}" width="200">
+                 alt="{{ trip.photos[0].credits }}" width="200">
             {% else %}
             <img src="/static/images/default_trip.jpg" alt="Default trip image" width="200">
             {% endif %}
@@ -44,64 +56,65 @@ Nelson 4WD Club
         <p id="date">{{ trip.date|nicedate }}</p>
     </article>
     {% endfor %}
-
-
-
 </section>
 
+{# -------------------------------------------------------------
+   Join the Club section
+   Highlights membership benefits and call to action
+------------------------------------------------------------- #}
 <section id="Join_the_club">
     <h2>Join Nelson 4WD Club</h2>
-
-    <p>Become a member of the Nelson 4wd Club and enjoy exclusive benefits, including access to our trips, events, and
-        community resources.</p>
+    <p>
+        Become a member of the Nelson 4WD Club and enjoy exclusive benefits, including access to our trips, events, 
+        and community resources.
+    </p>
 
     <div id="features">
-        <Article id="feature">
+        {# Feature: Community #}
+        <article id="feature">
             <h3>🤝 community</h3>
-
             <ul>
                 <li>Friendly welcoming members</li>
                 <li>Social events</li>
                 <li>Knowledge and tips</li>
             </ul>
-        </Article>
+        </article>
 
-        <Article id="feature">
+        {# Feature: Vehicle support #}
+        <article id="feature">
             <h3>🔧 Vehicle support</h3>
-
             <ul>
                 <li>Member discounts</li>
                 <li>Recovery assistance</li>
                 <li>Vehicle modification advice</li>
                 <li>Technical workshops</li>
             </ul>
-        </Article>
+        </article>
 
-        <Article id="feature">
+        {# Feature: Regular trips #}
+        <article id="feature">
             <h3>🚙 Regular trips</h3>
-
             <ul>
                 <li>Monthly organized adventures</li>
-                <li>Beginner to advanced
-                    difficulty levels</li>
+                <li>Beginner to advanced difficulty levels</li>
                 <li>Experienced trip leaders</li>
             </ul>
-        </Article>
+        </article>
 
-        <Article id="feature">
+        {# Feature: Exclusive access #}
+        <article id="feature">
             <h3>📍 Exclusive access</h3>
-
             <ul>
                 <li>Private land permissions</li>
                 <li>Remote track locations</li>
                 <li>Local landowner relationships</li>
             </ul>
-        </Article>
+        </article>
     </div>
 
+    {# Membership price and contact call to action #}
     <h2>${{ settings.join_price }} a year</h2>
     <a href="mailto:{{ settings.contact_email }}?subject=New%20member.">Contact us</a>
+</section>
 
-
-
-    {% endblock %}
+{% endblock %}

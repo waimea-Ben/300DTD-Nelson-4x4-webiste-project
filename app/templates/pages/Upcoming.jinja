@@ -1,19 +1,22 @@
 {% extends 'pages/base.jinja' %}
 
-
 {% block title %}
-
 Upcoming Trips
-
 {% endblock %}
-
 
 {% block content %}
 <hr class="header-line">
 
+{# -------------------------------------------------------------
+   Upcoming Trips Page
+   Displays a table of upcoming trips with join/leave options
+   Includes extra info about what to bring and trip guidelines
+------------------------------------------------------------- #}
+
 <h1 id="upcoming-title">Upcoming Trips</h1>
 <p>Join us on our next adventure around the top of the South Island! Browse upcoming trips and reserve your spot. All skill levels welcome - from beginners to experienced off-roaders.</p>
 
+{# Trip table section #}
 <div class="trip-card">
     <header>
         <h3>Available trips</h3>
@@ -31,21 +34,27 @@ Upcoming Trips
         </thead>
         <tbody>
 
+            {# Loop over upcoming trips #}
             {% for trip in upcoming_trips %}
             <tr>
                 <td>
-                    <a href="#" hx-get="/trip/{{trip.id}}" hx-target="#trip-info" hx-swap="outerHTML" hx-trigger="click"
-                        onclick="openOverlay(); setTimeout(() => {loadMap(`{{ trip.meeting }}`, `{{ trip.location }}`)}, 50);">
+                    {# Trip name link triggers overlay and map load #}
+                    <a href="#" 
+                       hx-get="/trip/{{trip.id}}" 
+                       hx-target="#trip-info" 
+                       hx-swap="outerHTML" 
+                       hx-trigger="click"
+                       onclick="openOverlay(); setTimeout(() => {loadMap(`{{ trip.meeting }}`, `{{ trip.location }}`)}, 50);">
                         {{ trip.name }}
                     </a>
-
                 </td>
                 <td>{{ trip.location }}</td>
                 <td>{{ trip.date|nicedateshort }}</td>
                 <td>{{ trip.grade }}</td>
                 <td>
+                    {# Join/Leave button form #}
                     <form method="post"
-                        action="{% if trip.id in joined_trip_ids %}/unjoin-trip/{{ trip.id }}{% else %}/join-trip/{{ trip.id }}{% endif %}">
+                          action="{% if trip.id in joined_trip_ids %}/unjoin-trip/{{ trip.id }}{% else %}/join-trip/{{ trip.id }}{% endif %}">
                         <button type="submit">
                             {% if trip.id in joined_trip_ids %}Leave{% else %}Join{% endif %}
                         </button>
@@ -53,11 +62,14 @@ Upcoming Trips
                 </td>
             </tr>
             {% endfor %}
+
         </tbody>
     </table>
 </div>
 
+{# Additional info sections: what to bring and guidelines #}
 <div id="upcoming-extras">
+
     <article id="What-to-bring">
         <header>
             <h4>What to bring</h4>
@@ -76,7 +88,7 @@ Upcoming Trips
 
     <article id="guidelines">
         <header>
-            <h4>Guidlines</h4>
+            <h4>Guidelines</h4>
         </header>
         <ul>
             <li>All participants must have a 4WD vehicle in good working condition.</li>
@@ -84,11 +96,11 @@ Upcoming Trips
             <li>Participants must carry the required gear and equipment listed above.</li>
             <li>Follow the instructions of the trip leader at all times.</li>
             <li>Adhere to the principles of Leave No Trace.</li>
-            <li>Never loose sight of vehicle behind you.</li>
+            <li>Never lose sight of vehicle behind you.</li>
             <li>Ensure your vehicle is fueled and serviced before the trip.</li>
             <li>Inform the trip leader of any special requirements.</li>
-
         </ul>
     </article>
+
 </div>
 {% endblock %}

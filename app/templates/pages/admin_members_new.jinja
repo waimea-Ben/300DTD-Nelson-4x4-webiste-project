@@ -1,50 +1,54 @@
 {% extends 'pages/base.jinja' %}
 
-
+{# ------------------------------------------------------------- #}
+{# Page Title Block — sets the browser/tab title #}
+{# ------------------------------------------------------------- #}
 {% block title %}
-
     Nelson 4x4 Club
-
 {% endblock %}
 
 
-
+{# ------------------------------------------------------------- #}
+{# Main Content Block — form for adding a new club member #}
+{# ------------------------------------------------------------- #}
 {% block content %}
 <hr class="header-line">
 <h2>Add new member</h2>
+
+{# Member creation form — posts data to /admin/members/new #}
 <form 
     method="post" 
     action="/admin/members/new"
     id="member-form"
 >
+    {# Basic info fields #}
     <label>Name:
-    <input type="text" name="name" required>
+        <input type="text" name="name" required>
     </label>
 
     <label>Password:
-    <input type="password" name="password" required>
+        <input type="password" name="password" required>
     </label>
 
     <label>Email:
-    <input type="email" name="email" required>
+        <input type="email" name="email" required>
     </label>
 
     <label>Phone Number:
         <input type="text" name="number">
     </label>
 
+    {# Vehicle details #}
     <label>Vehicle:
         <input type="text" name="vehicle" required>
     </label>
 
+    {# Optional admin checkbox #}
     <label>Admin:
         <input type="checkbox" name="admin">
     </label>
 
+    {# Submit button #}
     <button type="submit">Add</button>
 </form>
-
-
-
 {% endblock %}
-

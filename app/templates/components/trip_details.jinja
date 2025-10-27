@@ -1,28 +1,36 @@
+{# =====================================================
+   Trip Info Overlay — shows detailed trip information
+   Includes overview, participants, gear list, and map links
+===================================================== #}
 <div id="trip-info">
+
+    {# Close button to hide overlay #}
     <a href="#" class="close-btn" onclick="document.getElementById('overlay').style.display='none'; return false;">×</a>
 
+    <h1>{{ trip.name }}</h1>
+    <p>📍{{ trip.location }}  📆{{ trip.date|nicedate }}</p>
 
-    <h1>{{trip.name}}</h1>
-    <p>📍{{trip.location}}  📆{{trip.date|nicedate}}</p>
-
+    {# Trip overview section #}
     <article id="overview">
         <h3>Trip Overview</h3>
-        <p>{{trip.notes}}</p>
+        <p>{{ trip.notes }}</p>
         <p><strong>Trip Leader:</strong> {{ trip.leader_name or 'TBA' }}</p>
-        <p><strong>Difficulty:</strong> {{trip.grade}}</p>
-        <p><strong>Meeting date:</strong> {{trip.date|nicedateshort}}</p>
+        <p><strong>Difficulty:</strong> {{ trip.grade }}</p>
+        <p><strong>Meeting date:</strong> {{ trip.date|nicedateshort }}</p>
     </article>
 
+    {# Participants list #}
     <article id="participants">
         <h3>Participants</h3>
         {% for a in attendees %}
         <article id="participant">
-            <h4>{{a.name}}</h4>
-            <p>{{a.vehicle}}</p>
+            <h4>{{ a.name }}</h4>
+            <p>{{ a.vehicle }}</p>
         </article>
         {% endfor %}
     </article>
 
+    {# Gear checklist section #}
     <article id="gear">
         <h3>Required Gear & Equipment</h3>
         <li>Recovery gear (snatch strap, shackles, bow shackles)</li>
@@ -30,36 +38,39 @@
         <li>First aid kit</li>
         <li>UHF radio (channel 20)</li>
         <li>Spare tire and repair kit</li>
-        <li>food and water</li>
+        <li>Food and water</li>
         <li>Warm clothing and rain gear</li>
         <li>Torch/headlamp with spare batteries</li>
     </article>
 
+    {# Trip directions and map info section #}
     <article id="trip_directions">
         <header>
             <h2>📍Trip location and directions</h2>
         </header>
+
         <article id="map"></article>
-            <article id="destination">
-                <img src="/static/images/trip-destination.png" style="height: auto; width: 1rem;">
-                <div class="details">
-                    <h3>Trip Destination</h3>
-                    <p>{{trip.location}}</p>
-                </div>
-                <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}"
-                    target="_blank"><button>Open in Maps</button></a>
-            </article>
 
-            <article id="meeting">
-                <img src="/static/images/meeting-point.png" style="height: auto; width: 1rem;">
-                <div class="details">
-                    <h3>Meeting Point</h3>
-                    <p>{{trip.meeting}}</p>
-                </div>
-                <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}"
-                    target="_blank"><button>Open in Maps</button></a>
+        <article id="destination">
+            <img src="/static/images/trip-destination.png" style="height: auto; width: 1rem;">
+            <div class="details">
+                <h3>Trip Destination</h3>
+                <p>{{ trip.location }}</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.location | urlencode }}" target="_blank">
+                <button>Open in Maps</button>
+            </a>
+        </article>
 
-            </article>
-        
+        <article id="meeting">
+            <img src="/static/images/meeting-point.png" style="height: auto; width: 1rem;">
+            <div class="details">
+                <h3>Meeting Point</h3>
+                <p>{{ trip.meeting }}</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ trip.meeting | urlencode }}" target="_blank">
+                <button>Open in Maps</button>
+            </a>
+        </article>
     </article>
 </div>

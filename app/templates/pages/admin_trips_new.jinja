@@ -1,17 +1,24 @@
 {% extends 'pages/base.jinja' %}
 
-
+{# -------------------------------------------------------------
+   Page Title Block — sets the browser/tab title
+------------------------------------------------------------- #}
 {% block title %}
-
-Nelson 4x4 Club
-
+    Nelson 4x4 Club
 {% endblock %}
 
+
+{# -------------------------------------------------------------
+   Main Content Block — form for adding a new trip
+------------------------------------------------------------- #}
 {% block content %}
 <hr class="header-line">
 
+{# Trip creation form — posts data to /admin/trips/new #}
 <form method="post" action="/admin/trips/new" id="trip-form">
-<h2>Add new trip</h2>
+    <h2>Add new trip</h2>
+
+    {# Basic trip details #}
     <label>Name:
         <input type="text" name="name" required>
     </label>
@@ -24,10 +31,11 @@ Nelson 4x4 Club
         <input type="text" name="location" required>
     </label>
 
-    <label>meeting place:
+    <label>Meeting place:
         <input type="text" name="meeting" required>
     </label>
 
+    {# Trip difficulty selection #}
     <label for="difficulty">Difficulty:</label>
     <select id="difficulty" name="difficulty">
         <option value="Easy">Easy</option>
@@ -35,25 +43,20 @@ Nelson 4x4 Club
         <option value="Challenging">Challenging</option>
     </select>
 
-    <label>notes:
+    {# Additional notes #}
+    <label>Notes:
         <textarea name="notes" rows="4" cols="50"></textarea>
     </label>
 
+    {# Trip leader selection from existing members #}
     <label for="leader">Leader:</label>
     <select name="leader" id="leader">
         {% for member in members %}
-        <option value="{{ member.id }}">
-            {{ member.name }}
-        </option>
+            <option value="{{ member.id }}">{{ member.name }}</option>
         {% endfor %}
     </select>
 
-
-
-
+    {# Submit button #}
     <button type="submit">Add</button>
 </form>
-
-
-
 {% endblock %}

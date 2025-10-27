@@ -1,4 +1,11 @@
-<form hx-put="/members/{{ member.id }}/edit" hx-target="#member-{{ member.id }}" hx-swap="innerHTML">
+{# =====================================================
+   Member edit form — updates member details via HTMX PUT
+===================================================== #}
+<form 
+    hx-put="/members/{{ member.id }}/edit" 
+    hx-target="#member-{{ member.id }}" 
+    hx-swap="innerHTML"
+>
   <label>Name:</label>
   <input type="text" name="name" value="{{ member.name }}" required><br>
 
@@ -15,7 +22,12 @@
   <input type="text" name="vehicle" value="{{ member.vehicle }}"><br>
 
   <label>Admin:</label>
-  <input type="checkbox" name="admin" value="true" {% if member.admin %}checked{% endif %}><br>
+  <input 
+      type="checkbox" 
+      name="admin" 
+      value="true" 
+      {% if member.admin %}checked{% endif %}
+  ><br>
 
   <button type="submit">Save</button>
 </form>

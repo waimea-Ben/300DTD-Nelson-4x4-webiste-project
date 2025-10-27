@@ -1,10 +1,25 @@
+{# =====================================================
+   Member details block — displays basic info and controls
+===================================================== #}
 <div id="member-details">
     <div>
         <strong>{{ member.name }}</strong>
         <p>{{ member.vehicle }}</p>
     </div>
+
+    {# Action buttons: edit (inline via HTMX) and delete link #}
     <div>
-        <button role="button" hx-get="/members/{{ member.id }}/edit" hx-target="#member-{{ member.id }}" hx-swap="innerHTML"><img src="/static/images/edit.png"></button>
-        <a href="/members/{{ member.id }}/delete" role="button"><img src="/static/images/bin.png"></a>
+        <button 
+            role="button" 
+            hx-get="/members/{{ member.id }}/edit" 
+            hx-target="#member-{{ member.id }}" 
+            hx-swap="innerHTML"
+        >
+            <img src="/static/images/edit.png">
+        </button>
+
+        <a href="/members/{{ member.id }}/delete" role="button">
+            <img src="/static/images/bin.png">
+        </a>
     </div>
 </div>

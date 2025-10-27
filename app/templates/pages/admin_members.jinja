@@ -1,30 +1,35 @@
 {% extends 'pages/base.jinja' %}
 
-
+{# -------------------------------------------------------------
+   Page Title Block — sets the browser/tab title
+------------------------------------------------------------- #}
 {% block title %}
-
     Admin
-
 {% endblock %}
 
 
+{# -------------------------------------------------------------
+   Main Content Block — member management interface
+------------------------------------------------------------- #}
 {% block content %}
 <hr class="header-line">
 
+{# Tab navigation for admin sections #}
 <div class="tab-bar">
     <a href="/admin/settings" class="tab">settings</a>
     <a href="/admin/trips" class="tab">trips</a>
     <a href="/admin/members" class="tab active">Members</a>
-    
 </div>  
 
+{# Member management section #}
 <section id="members-list">
     <header>
-    <br>
+        <br>
         <h2>Member Management</h2>
         <p>Add, edit, and manage current members</p>
     </header>
 
+    {# Search form for filtering members #}
     <form action="/admin/members" method="get">
         <div class="search-bar">
             <input type="text" name="q" value="{{ search_text }}" placeholder="Search Members...">
@@ -32,8 +37,10 @@
         </div>
     </form>
 
+    {# Button to add a new member #}
     <a role="button" href="/admin/members/new" class="button">Add New Member</a>
 
+    {# List of members — includes member_details component for each member #}
     {% if members %}
         {% for member in members %}
             <article id="member-{{ member.id }}">
@@ -45,7 +52,4 @@
     {% endif %}
 
 </section>
-
-
-
 {% endblock %}

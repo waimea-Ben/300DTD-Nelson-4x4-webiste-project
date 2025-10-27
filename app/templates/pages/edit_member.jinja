@@ -1,21 +1,33 @@
+{# -------------------------------------------------------------
+   Member Edit Form
+   Allows updating a member's information
+------------------------------------------------------------- #}
 <form method="POST" action="/members/{{ member.id }}/edit">
+
+  {# Member name #}
   <label>Name:</label>
   <input type="text" name="name" value="{{ member.name }}" required><br>
 
+  {# Password hash (for backend verification or reset) #}
   <label>Password Hash:</label>
   <input type="text" name="password_hash" value="{{ member.password_hash }}" required><br>
 
+  {# Email address #}
   <label>Email:</label>
   <input type="email" name="email" value="{{ member.email }}" required><br>
 
+  {# Contact number #}
   <label>Number:</label>
   <input type="text" name="number" value="{{ member.number }}"><br>
 
+  {# Vehicle details #}
   <label>Vehicle:</label>
   <input type="text" name="vehicle" value="{{ member.vehicle }}"><br>
 
+  {# Admin privileges checkbox #}
   <label>Admin:</label>
   <input type="checkbox" name="admin" value="true" {% if member.admin %}checked{% endif %}><br>
 
+  {# Submit button #}
   <button type="submit">Save</button>
 </form>

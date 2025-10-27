@@ -1,70 +1,70 @@
 {% extends 'pages/base.jinja' %}
 
-
+{# -------------------------------------------------------------
+   Page Title Block — sets the browser/tab title
+------------------------------------------------------------- #}
 {% block title %}
-
-Admin
-
+    Admin
 {% endblock %}
 
 
+{# -------------------------------------------------------------
+   Main Content Block — trip management interface
+------------------------------------------------------------- #}
 {% block content %}
 <hr class="header-line">
 
+{# Tab navigation for admin sections #}
 <div class="tab-bar">
     <a href="/admin/settings" class="tab">settings</a>
     <a href="/admin/trips" class="tab active">trips</a>
     <a href="/admin/members" class="tab">Members</a>
 </div>
 
+{# Trip management section #}
 <section id="trips-list">
     <header>
         <h2>Trip Management</h2>
         <p>Create, edit, and manage club trips</p>
-
-
     </header>
 
+    {# Search form for filtering trips #}
     <form action="/admin/trips" method="get">
         <div class="search-bar">
             <input type="text" name="q" value="{{ search_text }}" placeholder="Search trips...">
             <button type="submit">🔎</button>
         </div>
     </form>
+
+    {# Button to add a new trip #}
     <a role="button" href="/admin/trips/new" class="button">Add New Trip</a>
     <br>
 
+    {# Display upcoming and past trips #}
     {% if not no_results %}
         <h3>Upcoming Trips</h3>
         {% if future_trips %}
-
             {% for trips in future_trips %}
-            <article id="trip-{{ trips.id }}">
-                {% include 'components/admin_trip_details.jinja' %}
-            </article>
+                <article id="trip-{{ trips.id }}">
+                    {% include 'components/admin_trip_details.jinja' %}
+                </article>
             {% endfor %}
-
-            {% else %}
+        {% else %}
             <p>No upcoming trips found matching "{{ search_text }}"</p>
-            {% endif %}
+        {% endif %}
 
         <h3>Past Trips</h3>
-
         {% if past_trips %}
             {% for trips in past_trips %}
-            <article id="trip-{{ trips.id }}">
-                {% include 'components/admin_trip_details.jinja' %}
-            </article>
+                <article id="trip-{{ trips.id }}">
+                    {% include 'components/admin_trip_details.jinja' %}
+                </article>
             {% endfor %}
-
-            {% else %}
+        {% else %}
             <p>No past trips found matching "{{ search_text }}"</p>
-            {% endif %}
-
+        {% endif %}
     {% else %}
-    <p>No trips found matching "{{ search_text }}".</p>
+        <p>No trips found matching "{{ search_text }}".</p>
     {% endif %}
 </section>
-
-
 {% endblock %}

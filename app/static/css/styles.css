@@ -785,3 +785,74 @@ h3{
 #member-details img {
   height: 1.5rem;
 }
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 3rem;
+  border: #000 solid 1px;
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+}
+
+.search-bar input[type="text"] {
+  border: none;
+  border-radius: 2rem;
+  height: 2rem;
+  background-color: transparent;
+  margin: 0;
+}
+
+.search-bar input[type="text"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.search-bar button {
+  background-color: transparent;
+  border: none;
+  width: 5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin: 0;
+}
+
+#members-list article:first-of-type{
+  margin-top: 1rem;
+}
+
+#tripNButtons{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+#tripNButtons h3{
+  margin: 0;
+}
+
+#tripNButtons [role=button] {
+  padding: 0.5rem;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  border: #d9d9d9 1px solid;
+  width: 3rem;
+  height: 3rem;
+}
+
+#tripNButtons img {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+#tripNButtons p{
+  margin: 0;
+}
+
+#trip-buttons{
+  display: flex;
+  width: 10REM;
+  justify-content: flex-end;
+}

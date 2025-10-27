@@ -1,24 +1,32 @@
-<h3>{{ trips.name }}</h3>
-<p><strong>Location:</strong> {{ trips.location }}</p>
-<p><strong>Date:</strong> {{ trips.date }}</p>
-<p><strong>Leader:</strong> {{ trips.leader_name }}</p>
-<p><strong>Difficulty:</strong> {{ trips.grade }}</p>
-<p>{{ trips.description }}</p>
+ <div id="tripNButtons">
+    <div id="trip-deets">
+        <h3>{{ trips.name }}</h3>
+        <p>{{ trips.location }}, {{ trips.date|nicedate }}</p>
+        <p>Led by {{ trips.leader_name }}</p>
+        <p><strong>Difficulty:</strong> {{ trips.grade }}</p>
+        <p>{{ trips.description }}</p>
+    </div>
+    <div id="trip-buttons">
+    <div>
+        <button 
+            hx-get="/trips/{{ trips.id }}/edit"
+            hx-target="#trip-{{ trips.id }}"
+            hx-swap="innerHTML"
+            role="button">
+            <img src="/static/images/edit.png">
+        </button>
 
-<button 
-    hx-get="/trips/{{ trips.id }}/edit"
-    hx-target="#trip-{{ trips.id }}"
-    hx-swap="innerHTML">
-    Edit
-</button>
+        <a role="button" href="/trips/{{ trips.id }}/delete"><img src="/static/images/bin.png"></a>
 
-<a role="button" href="/trips/{{ trips.id }}/delete">Delete</a>
-
-{% if trips.is_past %}
-    <button 
-        hx-get="/trips/{{ trips.id }}/add-photos"
-        hx-target="#trip-{{ trips.id }}"
-        hx-swap="innerHTML">
-        Add photos  
-</button>
-{% endif %}
+        {% if trips.is_past %}
+            <button 
+                hx-get="/trips/{{ trips.id }}/add-photos"
+                hx-target="#trip-{{ trips.id }}"
+                hx-swap="innerHTML"
+                role="button">
+                <img src="/static/images/+.png">
+            </button>
+        {% endif %}
+        </div>
+    </div>
+</div>

@@ -26,8 +26,10 @@ Admin
     </header>
 
     <form action="/admin/trips" method="get">
-        <input type="text" name="q" value="{{ search_text }}" placeholder="Search trips...">
-        <button type="submit">Search</button>
+        <div class="search-bar">
+            <input type="text" name="q" value="{{ search_text }}" placeholder="Search trips...">
+            <button type="submit">🔎</button>
+        </div>
     </form>
     <a role="button" href="/admin/trips/new" class="button">Add New Trip</a>
     <br>

@@ -26,8 +26,10 @@
     </header>
 
     <form action="/admin/members" method="get">
-        <input type="text" name="q" value="{{ search_text }}" placeholder="Search members...">
-        <button type="submit">Search</button>
+        <div class="search-bar">
+            <input type="text" name="q" value="{{ search_text }}" placeholder="Search Members...">
+            <button type="submit">🔎</button>
+        </div>
     </form>
 
     <a role="button" href="/admin/members/new" class="button">Add New Member</a>

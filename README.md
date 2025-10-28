@@ -15,8 +15,7 @@ This project is a fully functional website for the **Nelson 4X4 Club**, built to
 - **Trip management** – create, edit, and view upcoming and past 4X4 trips  
 - **Photo gallery** – upload and manage trip photos with credits  
 - **Search and filtering** – quickly find trips, members, or past events  
-- **Admin dashboard** – manage members, trips, photos, and site settings  
-- **Responsive design** for mobile, tablet, and desktop use  
+- **Admin dashboard** – manage members, trips, photos, and site settings   
 - **Secure database integration** with permissions for different roles  
 
 ---

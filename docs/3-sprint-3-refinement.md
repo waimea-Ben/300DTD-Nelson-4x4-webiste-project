@@ -24,7 +24,7 @@ The web app is fully implemented with a refined UI:
 
 Testing the addition, editing, and deletion of members.
 
-**PLACE SCREENSHOTS AND/OR ANIMATED GIFS OF THE TESTING HERE**
+![members](images/members.gif)
 
 ### Changes / Improvements
 
@@ -39,14 +39,12 @@ Testing the addition, editing, and deletion of members.
 
 Testing creation, editing, joining, and leaving trips.
 
-**PLACE SCREENSHOTS AND/OR ANIMATED GIFS OF THE TESTING HERE**
+![trips](images/trips.gif)*
 
 ### Changes / Improvements
 
 - Adjusted table layouts for better readability on mobile.
 - Added dynamic join/leave buttons with correct session handling.
-
-**PLACE SCREENSHOTS AND/OR ANIMATED GIFS OF THE IMPROVED SYSTEM HERE**
 
 ---
 
@@ -54,14 +52,13 @@ Testing creation, editing, joining, and leaving trips.
 
 Testing the overlay popup and interactive Leaflet maps for trip locations and meeting points.
 
-**PLACE SCREENSHOTS AND/OR ANIMATED GIFS OF THE TESTING HERE**
+![trips](images/upcoming.gif)
+
 
 ### Changes / Improvements
 
 - Ensured map loads correctly for multiple trips without conflicts.
 - Improved map bounds and marker popups for better clarity.
-
-**PLACE SCREENSHOTS AND/OR ANIMATED GIFS OF THE IMPROVED SYSTEM HERE**
 
 ---
 

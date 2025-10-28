@@ -1,4 +1,4 @@
-/*=====================================================
+/* /*=====================================================
   User stylesheet - Building upon PicoCSS
 =====================================================*/
 *{
@@ -11,6 +11,7 @@ h1, h2, h3, h4, h5, h6 {
 
 li a img{
   height: 1rem;
+  width: 1rem;
 }
 
 /* use like: <p class="multiline-ellipsis" style="--lines:3">...text...</p> */
@@ -358,11 +359,10 @@ page#past_trips h1{
 
 .photo {
   position: relative;
-  width: 45%;
 }
 
 .photo img {
-  width: 100%;
+  width: 14rem;
   border-radius: 0.5rem;
   display: block;
   object-fit: cover;
@@ -855,4 +855,8 @@ h3{
   display: flex;
   width: 10REM;
   justify-content: flex-end;
+} 
+
+#logout-button img{
+  max-width: none;
 }

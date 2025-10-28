@@ -51,7 +51,7 @@
           {% if session.member_name %}
             <li>Hello, {{ session.member_name }}</li>
           {% endif %}
-          <li><a href="/logout"><img src="/static/images/logout.png"></a></li>
+          <li id="logout-button"><a href="/logout"><img src="/static/images/logout.png"></a></li>
 
         {% else %}
           <li><a href="/login">Login</a></li>
